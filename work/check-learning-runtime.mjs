@@ -81,7 +81,7 @@ try {
   fs.writeFileSync(sourceFile, '# Source fixture\nDefinitions, assumptions and independent checks for the regression fixtures.\n');
   call('source-read', 'read', { path: sourceFile }); result('source-read', 'read', {}, fs.readFileSync(sourceFile, 'utf8'));
   await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'source-read', path: sourceFile, kind: 'supplement', supports: 'Fixture definitions and stated assumptions are inspected.' }] });
-  await assert.rejects(() => runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'source-read', path: sourceFile, kind: 'armstrong', supports: 'This is actually a supplemental fixture, not Armstrong.' }] }), /Do not label/);
+  await assert.rejects(() => runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'source-read', path: sourceFile, kind: 'unknown', supports: 'This fixture has no supported provenance classification.' }] }), /class or supplement/);
   const plan = { goalNode: 'goal', nodes: [{ id: 'root', label: 'Fixture definition', dependsOn: [], status: 'current' }, { id: 'goal', label: 'Fixture connected goal', dependsOn: ['root'], status: 'pending' }] };
   const planning = { action: 'plan', plan, approach: 'Build from the checked fixture definition toward the connected fixture goal.', nodeStrands: [{ nodeId: 'root', strandIds: ['algebra'] }, { nodeId: 'goal', strandIds: ['graph'] }] };
   await assert.rejects(() => runtime(planning), /research\/verification/);
@@ -149,7 +149,7 @@ try {
   const claim = 'Fixture definition is justified and transferred.';
   const evidence = [directId, transferId].map(quizId => ({ quizId, understanding: claim, reasoningSound: true, review: 'The actual fixture reasoning justifies the definition and its application.' }));
   const progressed = { ...plan, nodes: [{ ...plan.nodes[0], status: 'confirmed', quizId: transferId }, { ...plan.nodes[1], status: 'current' }] };
-  const checkpointInput = { topic: 'Fixture topic', goal: 'Fixture connected goal', understood: [claim], needsPractice: ['Fixture graph interpretation needs a further check.'], nextStep: 'Continue the actual fixture goal node.', sources: ['Inspected local fixture source, not Armstrong'], evidence, lessonPlan: progressed };
+  const checkpointInput = { topic: 'Fixture topic', goal: 'Fixture connected goal', understood: [claim], needsPractice: ['Fixture graph interpretation needs a further check.'], nextStep: 'Continue the actual fixture goal node.', sources: ['Inspected local supplemental fixture source'], evidence, lessonPlan: progressed };
   await assert.rejects(() => checkpoint({ ...checkpointInput, evidence: evidence.slice(0, 1) }), /both reviewed direct/);
   await checkpoint(checkpointInput);
   assert.equal((await status()).plan.nodes[1].status, 'current', 'Runtime current node follows validated saved map');
@@ -232,19 +232,12 @@ try {
   assert.ok(!JSON.stringify(old.pending).includes('correctAnswer'));
   assert.equal(old.approvalId, 'saved-approved-checkpoint');
 
-  // Course classification cannot substitute supplemental inspection for an available original.
-  sessionId = 'armstrong-priority-fixture'; entries = [];
-  const catalogFolder = path.join(vault, 'Sources/Armstrong Online'); fs.mkdirSync(catalogFolder, { recursive: true });
-  const armstrongPath = path.join(scratch, 'armstrong-fixture.md'); fs.writeFileSync(armstrongPath, 'Original-source identity fixture only.');
-  const lesson = { key: 'u1-fixture', unit: 1, title: 'Fixture class title', ids: ['1.1.1'], variants: [], note: sourceFile, availability: 'Fixture cached original', assessments: [], schedule: [], assets: [{ ok: true, path: armstrongPath, label: 'Fixture original', url: 'https://example.invalid/fixture' }], references: [], teaching: { focus: 'Fixture scope', probe: 'Fixture probe', prerequisites: [], guardrails: 'Fixture guardrails' } };
-  fs.writeFileSync(path.join(catalogFolder, 'course-catalog.json'), JSON.stringify({ version: 1, builtAt: 'fixture', sourceHashes: {}, warnings: [], lessons: [lesson], assessments: [], events: [] }));
-  await runtime({ action: 'begin', topic: 'Fixture class title', goal: 'Fixture class scope', strands });
-  assert.equal((await status()).lessonKey, lesson.key, 'Exact known title automatically selects its class identity');
-  call('supplement-read', 'read', { path: sourceFile }); result('supplement-read', 'read', {}, 'Inspected supplement fixture.');
-  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'supplement-read', path: sourceFile, kind: 'supplement', supports: 'Supplemental scope information for fixture only.' }] });
-  await assert.rejects(() => stage(probe('algebra', 1, 'class-before-original')), /Cached Armstrong/);
-  call('original-read', 'read', { path: armstrongPath }); result('original-read', 'read', {}, 'Inspected original identity fixture.');
-  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'original-read', path: armstrongPath, kind: 'armstrong', supports: 'Relevant original class fixture inspected before supplements.' }] });
+  // Generic class sources and an optional lesson identifier work without a course catalog.
+  sessionId = 'class-source-fixture'; entries = [];
+  await runtime({ action: 'begin', topic: 'Fixture class title', goal: 'Fixture class scope', lessonKey: 'fixture-class-key', strands });
+  assert.equal((await status()).lessonKey, 'fixture-class-key');
+  call('original-read', 'read', { path: sourceFile }); result('original-read', 'read', {}, 'Inspected class fixture.');
+  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'original-read', path: sourceFile, kind: 'class', supports: 'Relevant original class fixture inspected for this goal.' }] });
   await stage(probe('algebra', 1, 'class-after-original'));
   const interrupted = 'crash-interrupted-quiz';
   call(interrupted, 'quiz', { question: (await status()).pending.question });

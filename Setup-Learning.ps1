@@ -5,7 +5,6 @@ param(
     [switch]$StartOnly,
     [switch]$SkipVoice,
     [switch]$SkipBrowser,
-    [ValidateSet('General', 'Armstrong')][string]$Course = 'General',
     [string]$Distro = 'Ubuntu-24.04',
     [string]$ExistingWorkspace
 )
@@ -83,7 +82,7 @@ if (-not $StartOnly) {
     if (-not (Get-Command wt.exe -ErrorAction SilentlyContinue)) { Install-LearningApp 'Microsoft.WindowsTerminal' }
     Push-Location $taskRoot
     try {
-        $taskBootstrap = @('-d', $Distro, '--', 'bash', 'work/bootstrap.sh', '--course', $Course.ToLowerInvariant())
+        $taskBootstrap = @('-d', $Distro, '--', 'bash', 'work/bootstrap.sh')
         if ($SkipBrowser) { $taskBootstrap += '--skip-browser' }
         Invoke-LearningCommand 'wsl.exe' $taskBootstrap
     } finally { Pop-Location }
@@ -99,7 +98,7 @@ if (-not $StartOnly) {
     . (Join-Path $taskRoot 'work/register-vault.ps1')
     Register-LearningVault (Join-Path $taskRoot 'outputs/Learning Vault')
     New-LearningShortcut 'Start Learning (Pi)' (Join-Path $taskRoot 'Setup-Learning.ps1') ('-StartOnly -Distro "' + $Distro + '"')
-    New-LearningShortcut 'Set Up Learning (Pi)' (Join-Path $taskRoot 'Setup-Learning.ps1') ('-Course ' + $Course + ' -Distro "' + $Distro + '"')
+    New-LearningShortcut 'Set Up Learning (Pi)' (Join-Path $taskRoot 'Setup-Learning.ps1') ('-Distro "' + $Distro + '"')
 }
 if ($NoLaunch) { Write-Host 'Setup completed. Use the Start Learning (Pi) desktop shortcut.'; return }
 if (-not $env:WT_SESSION) {

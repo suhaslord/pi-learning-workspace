@@ -33,8 +33,6 @@
     "../.pi/extensions/learning-workflow.ts",
     "../.pi/extensions/class-materials.ts",
     "../.pi/extensions/md-log.ts",
-    "../.pi/extensions/armstrong-online.ts",
-    "../.pi/extensions/lib/armstrong-online.ts",
     "../.pi/extensions/quiz.ts",
     "../.pi/extensions/voice.ts",
     "../.pi/extensions/study-lock.ts"

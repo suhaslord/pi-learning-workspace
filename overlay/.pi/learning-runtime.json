@@ -5,7 +5,7 @@
   "pacing": "One consequential reasoning connection and actual quiz at a time; wait for the attempt and resolve learner clarifications before advancing",
   "interaction": "The learner reasons, answers and approves the meaningful plan; Pi owns source selection, verification, sequencing and runtime bookkeeping",
   "method": "probe → verify → present dependency plan → learner approval → motivate → establish → connect → direct check → fresh transfer",
-  "sourcePriority": ["cached Armstrong material", "new learner class material", "prepared local lesson and question bank", "local OpenStax/MIT originals", "official external sources", "other labeled supplements"],
+  "sourcePriority": ["relevant learner class material", "other inspected local originals", "official external sources", "other labeled supplements"],
   "errorCategories": ["concept", "algebra", "notation", "graph", "context", "unclassified"],
   "probe": {"escalateAfterCorrect": 2, "difficultyJump": 2, "maximumDifficulty": 5, "ceiling": "reviewed miss plus surrounding clarification, or demonstrated goal-scope boundary; never invent a failure"},
   "verification": {"requires": ["correct direct check", "distinct later transfer check", "changed representation", "actual learner reasoning", "reviewed evidence"], "status": "VERIFIED"},

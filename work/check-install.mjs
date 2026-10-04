@@ -11,7 +11,7 @@ for (const [name, version] of [['@earendil-works/pi-coding-agent', manifest.pi],
 for (const [folder, name] of [['.pi', 'learn'], ['work/pi-interactive-subagents', 'subagents']]) {
   assert.equal(execFileSync('git', ['-C', folder, 'rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), manifest[name].commit);
 }
-for (const file of ['.pi/learning-runtime.json', '.pi/settings.json', 'outputs/Learning Vault/Home.md', 'work/voice-notes.py', '.pi/extensions/lib/armstrong-links.py']) assert.ok(fs.existsSync(file), `Missing ${file}`);
+for (const file of ['.pi/learning-runtime.json', '.pi/settings.json', 'outputs/Learning Vault/Home.md', 'work/voice-notes.py']) assert.ok(fs.existsSync(file), `Missing ${file}`);
 const { loadExtensions } = await import('./runtime/pi/node_modules/@earendil-works/pi-coding-agent/dist/core/extensions/loader.js');
 const files = fs.readdirSync('.pi/extensions').filter(name => name.endsWith('.ts')).map(name => path.join(root, '.pi/extensions', name));
 files.push(path.join(root, 'work/pi-interactive-subagents/pi-extension/subagents/index.ts'));
