@@ -16,6 +16,7 @@ const { loadExtensions } = await import('./runtime/pi/node_modules/@earendil-wor
 const files = fs.readdirSync('.pi/extensions').filter(name => name.endsWith('.ts')).map(name => path.join(root, '.pi/extensions', name));
 files.push(path.join(root, 'work/pi-interactive-subagents/pi-extension/subagents/index.ts'));
 files.push(path.join(root, 'work/runtime/pi/node_modules/pi-web-access/index.ts'));
+files.push(path.join(root, '.pi/extensions/visual-tools/index.ts'));
 const loaded = await loadExtensions(files, root);
 assert.deepEqual(loaded.errors, [], 'One or more extensions failed to load');
 console.log(`Install verified: ${loaded.extensions.length} extensions loaded; pinned sources/runtime and blank vault present. No AI request or microphone recording was made.`);
