@@ -19,7 +19,7 @@ function Invoke-LearningCommand {
 }
 function Install-LearningApp {
     param([string]$Id)
-    Invoke-LearningCommand 'winget.exe' @('install', '--exact', '--id', $Id, '--source', 'winget', '--accept-source-agreements', '--accept-package-agreements', '--disable-interactivity')
+    Invoke-LearningCommand 'winget.exe' @('install', '--exact', '--id', $Id, '--source', 'winget', '--silent', '--accept-source-agreements', '--accept-package-agreements', '--disable-interactivity')
 }
 function New-LearningShortcut {
     param([string]$Name, [string]$Script, [string]$ExtraArguments = '')
@@ -96,6 +96,8 @@ if (-not $StartOnly) {
         Invoke-LearningCommand $taskVoice @('-m', 'pip', 'install', '-r', (Join-Path $taskRoot 'work/voice-requirements.txt'), '--disable-pip-version-check')
         if (-not (Test-Path -LiteralPath (Join-Path $taskRoot 'work/runtime/voice-model/model.bin'))) { Invoke-LearningCommand $taskVoice @((Join-Path $taskRoot 'work/voice-notes.py'), '--prepare') }
     }
+    . (Join-Path $taskRoot 'work/register-vault.ps1')
+    Register-LearningVault (Join-Path $taskRoot 'outputs/Learning Vault')
     New-LearningShortcut 'Start Learning (Pi)' (Join-Path $taskRoot 'Setup-Learning.ps1') ('-StartOnly -Distro "' + $Distro + '"')
     New-LearningShortcut 'Set Up Learning (Pi)' (Join-Path $taskRoot 'Setup-Learning.ps1') ('-Course ' + $Course + ' -Distro "' + $Distro + '"')
 }

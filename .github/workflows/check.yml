@@ -5,6 +5,13 @@ on:
 permissions:
   contents: read
 jobs:
+  windows-setup:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify vault registration without opening apps
+        shell: powershell
+        run: ./work/check-vault-registration.ps1
   regression:
     runs-on: ubuntu-24.04
     steps:

@@ -10,8 +10,8 @@ The complete desktop workflow supports **64-bit Windows 11 with WSL2/Ubuntu 24.0
 
 1. Download this repository using GitHub's **Code → Download ZIP**, extract it to a permanent local folder, and double-click **Setup-Learning.cmd**. A local folder outside OneDrive is preferable for the installed dependencies.
 2. If WSL is missing, setup requests installation. Follow Windows' restart prompt and open Ubuntu once to create a Linux user, then run setup again.
-3. Setup installs Obsidian, Windows Terminal, a pinned Node/Pi runtime, research helpers, diagram tools and local English dictation, and creates desktop shortcuts. The first installation downloads dependencies and the speech model; it takes time. Subsequent starts reuse them.
-4. In Pi, use **`/login`** to sign into your own provider, then **`/model`** to select a model available to that account. For a ChatGPT subscription, choose the OpenAI Codex OAuth provider shown by Pi. Setup cannot complete account consent for you. Helpers inherit your chosen provider/model.
+3. Setup installs Obsidian, Windows Terminal, a pinned Node/Pi runtime, research helpers, diagram tools and local English dictation, registers your notebook, and creates desktop shortcuts. The first installation downloads dependencies and the speech model; it takes time. Subsequent starts reuse them. If another Obsidian vault is already open, close Obsidian once and re-run setup to register the new notebook safely. Existing vault registrations and settings are retained, with a local configuration backup.
+4. In Pi, use **`/login`** to sign into your own provider, then **`/model`** to select a model available to that account. For a ChatGPT subscription, choose the OpenAI subscription/OAuth sign-in option shown by Pi. Setup cannot complete account consent for you. Helpers inherit your chosen provider/model.
 5. Edit **Learner Profile.md** in Obsidian and type **`/learn <your goal>`** in Pi. Use **Start Learning (Pi)** next time; it opens the notes and resumes this workspace's latest Pi session.
 
 The launcher trusts this repository's local extensions for that run. Review the source before using it; it does not change global Pi project trust. Setup preserves existing notes, provider choices and credentials. It fetches pinned upstream sources and applies the included integration patches instead of requiring you to configure extensions by hand.
@@ -48,6 +48,8 @@ Course preparation can take substantially longer than the core setup. `/course <
 ```
 
 Re-run setup after an interrupted download. It creates missing files and reuses installed dependencies; it does not reset progress. A pre-existing unmanaged `.pi` folder is refused to avoid overwriting another setup. Keep this folder in place after creating shortcuts. To choose a different old session, use Pi's `/resume` command. Microphone access may need enabling in Windows privacy settings; no automatic mic test runs.
+
+The launcher opens notes with Obsidian's [path-based URI](https://help.obsidian.md/Extending%2BObsidian/Obsidian%2BURI), so setup first registers the local vault. Registration is tested on isolated configurations and refuses to edit settings while an unregistered vault's app is running.
 
 AI authentication errors: use `/login` in Pi; do not place keys in the repository. Windows application installation uses winget and may show OS prompts. Visual browser dependencies on Linux may need Ubuntu's browser libraries; see Puppeteer's official troubleshooting guide. The terminal tutor works with `-SkipBrowser`, but browser-backed diagram rendering requires the browser install.
 
