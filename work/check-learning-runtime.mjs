@@ -284,7 +284,7 @@ try {
     if (value?.message?.customType === 'learning-runtime') runtimeContext = value.message.content;
   }
   assert.ok(agentContext && runtimeContext.includes('recentReviews') && !runtimeContext.includes('"reviews":'), 'Automatic context is compact; explicit status and persisted evidence retain full history');
-  assert.ok(agentContext.systemPrompt.includes('The two design principles') && agentContext.systemPrompt.includes("The learner's explicit additions"), 'Live guidance consumes the transcript-grounded principles while preserving explicitly requested additions');
+  assert.ok(agentContext.systemPrompt.includes('The two design principles') && agentContext.systemPrompt.includes("Workspace features beyond the video"), 'Live guidance consumes the transcript-grounded principles while distinguishing workspace features from video requirements');
   console.log('Runtime guards passed: source/research provenance, all-strand bracketing, escalation, error repair, plan approval, per-node loop, direct+fresh transfer, checkpoints, exact resume, legacy progress, test-prep and unchanged final-test authority.');
 } finally {
   fs.rmSync(scratch, { recursive: true, force: true });

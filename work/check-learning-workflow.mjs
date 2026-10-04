@@ -37,6 +37,8 @@ try {
     assert.ok(policy.systemPrompt.includes('in-depth teaching is the default') && policy.systemPrompt.includes('no extra study-lock release requirements'), 'Runtime depth policy must preserve the existing release contract');
     assert.ok(policy.systemPrompt.includes("learner's demonstrated knowledge edge") && policy.systemPrompt.includes('system absorbs logistics'), 'Video principles apply even before a runtime has been armed');
     assert.ok(policy.systemPrompt.includes('Resolve learner clarifications before advancing') && policy.systemPrompt.includes('not a fixed script or question quota'));
+    assert.ok(policy.systemPrompt.includes("learner's chosen language") && policy.systemPrompt.includes('profile is optional'), 'Each learner can supply their own language and context');
+    assert.ok(policy.systemPrompt.includes('Never assume a particular teacher') && policy.systemPrompt.includes('across subjects'), 'Teaching must not impose one personal course');
   }
   const vault = path.join(scratch, 'vault');
   const transcript = path.join(vault, 'Sessions/2026-10-03-test-session.md');
@@ -180,6 +182,19 @@ try {
   await tools.get('learning_runtime').definition.execute('new-scope', { action: 'begin', topic: params.topic, goal: 'A different agreed scope', strands: [{ id: 'rates', label: 'Rates', scope: 'The new explicitly requested rate goal', maxDifficulty: 5 }] }, undefined, undefined, ctx);
   await checkpoint.execute('changed-scope', { ...unchanged, goal: 'A different agreed scope' }, undefined, undefined, ctx);
   assert.ok(!fs.readFileSync(path.join(vault, 'Lesson Map.md'), 'utf8').includes('```mermaid'), 'Do not show the old current node as the map of a changed goal');
+  const originalTimezone = process.env.TZ;
+  try {
+    for (const timezone of ['Pacific/Kiritimati', 'Pacific/Honolulu']) {
+      process.env.TZ = timezone;
+      const today = new Date();
+      const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 12);
+      const expected = `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
+      const saved = await checkpoint.execute('local-review-date', { ...unchanged, goal: 'A different agreed scope', reviewOn: undefined }, undefined, undefined, ctx);
+      assert.equal(saved.details.reviewOn, expected, `Review defaults must follow the learner's local day in ${timezone}`);
+    }
+  } finally {
+    if (originalTimezone === undefined) delete process.env.TZ; else process.env.TZ = originalTimezone;
+  }
   console.log('New checkpoint claims reject fabricated, cancelled, wrong and unsound evidence; maps and frontiers persist across sessions.');
   await assert.rejects(() => checkpoint.execute('bad', { ...params, reviewOn: '2026-02-30' }, undefined, undefined, ctx));
   await commands.get('learn').handler('inverse functions', ctx);
@@ -191,6 +206,40 @@ try {
   const count = sent.length;
   await commands.get('review').handler('', ctx);
   assert.equal(sent.length, count, 'Do not interrupt an active quiz');
+  assert.ok(!notices.some(notice => notice.level === 'error'), JSON.stringify(notices));
+  const commandDir = path.join(scratch, 'command-fixtures');
+  fs.mkdirSync(commandDir);
+  const executionLog = path.join(scratch, 'opened-notes.jsonl');
+  const fakeCommand = `#!/usr/bin/env node\nconst fs = require('node:fs');\nconst path = require('node:path');\nconst command = path.basename(process.argv[1]);\nfs.appendFileSync(${JSON.stringify(executionLog)}, JSON.stringify({ command, args: process.argv.slice(2) }) + '\\n');\nif (command === 'wslpath') process.stdout.write(${JSON.stringify("C:\\Learner's notes\\Current Lesson.md\n")});\n`;
+  for (const command of ['xdg-open', 'wslpath', 'powershell.exe']) {
+    const fixture = path.join(commandDir, command);
+    fs.writeFileSync(fixture, fakeCommand);
+    fs.chmodSync(fixture, 0o755);
+  }
+  const originalPath = process.env.PATH;
+  let wslVault;
+  try {
+    process.env.PATH = commandDir + path.delimiter + originalPath;
+    await commands.get('notes').handler('', ctx);
+    if (/^\/mnt\/[a-z]\//.test(root)) {
+      wslVault = fs.mkdtempSync(path.join(root, 'work/downloads/notes-check-'));
+      fs.copyFileSync(path.join(vault, 'Current Lesson.md'), path.join(wslVault, 'Current Lesson.md'));
+      fs.writeFileSync(path.join(scratch, '.pi/learning.json'), JSON.stringify({ vaultPath: wslVault }));
+      await commands.get('notes').handler('', ctx);
+    }
+  } finally {
+    process.env.PATH = originalPath;
+    if (wslVault) fs.rmSync(wslVault, { recursive: true, force: true });
+    fs.writeFileSync(path.join(scratch, '.pi/learning.json'), JSON.stringify({ vaultPath: 'vault', autoLog: true }));
+  }
+  const executions = fs.readFileSync(executionLog, 'utf8').trim().split('\n').map(line => JSON.parse(line));
+  assert.equal(executions[0].command, 'xdg-open', 'Native Ubuntu opens notes through the desktop URI handler');
+  assert.ok(executions[0].args[0].startsWith('obsidian://open?path='));
+  if (wslVault) {
+    assert.equal(executions[1].command, 'wslpath');
+    assert.equal(executions[2].command, 'powershell.exe');
+    assert.ok(executions[2].args.at(-1).includes('Learner%27s'), 'Escape apostrophes before passing a URI to PowerShell');
+  }
   assert.ok(!notices.some(notice => notice.level === 'error'), JSON.stringify(notices));
   console.log('Automatic logging, reload, unlog, answer privacy, checkpoints, review and commands passed.');
 

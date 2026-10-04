@@ -17,6 +17,19 @@ If authentication fails, use `/login` in Pi. Keep credentials out of the reposit
 
 With `-SkipBrowser`, the terminal tutor works, but browser-backed diagram rendering is unavailable. The shell bootstrap can install core tools on Ubuntu; desktop shortcuts, microphone integration and study window pinning require Windows. Other desktop platforms are not tested.
 
+## Ubuntu core setup
+
+From the extracted repository folder on Ubuntu 24.04:
+
+```bash
+bash work/bootstrap.sh                  # Install core and diagram tools
+bash work/bootstrap.sh --skip-browser   # Or omit the optional browser download
+bash work/bootstrap.sh --check          # Verify installed tools
+bash work/start-learning.sh             # Start or resume the tutor
+```
+
+Install Obsidian separately and open `outputs/Learning Vault`. `/notes` uses the desktop's Obsidian URI handler; on a headless machine, read the saved Markdown files directly. Windows voice and focus mode are unavailable on native Ubuntu. The tutor follows the optional learner profile's chosen language; local voice transcription currently supports English only. Review dates use the computer's local timezone.
+
 ## Source layout
 
 - `dependencies.json`: pinned upstream revisions and runtime versions.

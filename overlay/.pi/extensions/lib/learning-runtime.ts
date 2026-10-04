@@ -223,7 +223,7 @@ export function saveRuntimePlan(ctx: ExtensionContext, state: RuntimeState | und
 
 function status(state: RuntimeState, ctx: ExtensionContext) {
 	return { ...state, nodeVerification: state.plan?.nodes.map(node => ({ id: node.id, status: verified(state, ctx.sessionManager.getBranch(), node.id) ? "VERIFIED" : legacyChecked(state, ctx.sessionManager.getBranch(), node.id) ? "LEGACY_CHECKED" : "UNVERIFIED" })),
-		instruction: "Reuse this exact approved goal/current node and unfinished question. No prepared source or correct guess is mastery. Runtime gates validate records and ordering; tutor still verifies mathematics and actual reasoning. Existing lock-release and recovery rules are unchanged." };
+		instruction: "Reuse this exact approved goal/current node and unfinished question. No prepared source or correct guess is mastery. Runtime gates validate records and ordering; tutor still verifies subject-matter correctness and actual reasoning. Existing lock-release and recovery rules are unchanged." };
 }
 
 function compactStatus(state: RuntimeState, ctx: ExtensionContext) {

@@ -1,7 +1,15 @@
 # Learner profile
 
-Add your subject, teacher/course, current topics, deadlines and preferred notation here. Do not treat self-reported confidence as demonstrated understanding.
+Optional: fill in what helps Pi adapt the next lesson. Leave anything unknown or irrelevant blank. Update this as your goals change; no school, teacher or course is required.
 
-Teach at my demonstrated knowledge edge. Build each idea from relevant foundations, motivate it, justify the reasoning and connect it to what I already know. Let me attempt a plausible discovery and resolve my questions before advancing.
+- Subject or skill:
+- Learning goal or practical use:
+- Prior experience and topics to review:
+- Preferred language:
+- Preferred terminology or notation:
+- Pace, explanation preferences or accessibility needs:
+- Sources, course or training material (if any):
+- Scope or topics to exclude:
+- Deadline or assessment (if any):
 
-Use one coherent explanation from inspected sources. Handle source selection and lesson logistics for me. Keep the lesson adaptive; preparation is not a fixed script or a question quota. Save the exact unfinished question and resume it next time.
+Pi confirms understanding through actual attempts rather than treating confidence as evidence. It handles source selection and lesson logistics, saves the exact unfinished question and resumes from demonstrated progress.

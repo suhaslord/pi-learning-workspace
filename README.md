@@ -1,33 +1,39 @@
 # Pi learning workspace
 
-Learn with an AI tutor in your terminal and keep your notes in Obsidian. Pi checks what you know, builds a small learning plan, and teaches one idea at a time.
+An adaptive AI tutor in your terminal, with notes in Obsidian. Learn a subject, build a professional skill or work through a course. Pi checks your understanding, agrees on a small plan and teaches one connected idea at a time.
 
-Includes readable math, local voice notes, saved progress, review questions and optional study focus mode.
+Includes saved progress, review questions, readable math and optional voice notes and study focus mode. No predefined teacher or curriculum; bring your own goals and sources.
 
-## Setup
+## Get started
 
-You need **Windows 11 (64-bit)**, internet and your own AI subscription or API account.
+You need internet and an AI account supported by Pi. Choose your provider with `/login` and your model with `/model`; no particular subscription is required.
 
-1. Choose **Code → Download ZIP** and extract it to a permanent folder.
-2. Double-click **Setup-Learning.cmd**. It installs the tools and creates desktop shortcuts.
-3. In Pi, run **`/login`**, then **`/model`** to choose a model your account supports.
-4. Type **`/learn <what you want to learn>`**.
+**Windows 11 (64-bit):** Download **Code → Download ZIP**, extract it to a permanent folder and double-click **Setup-Learning.cmd**. Setup installs the tools and creates desktop shortcuts. Open **Start Learning (Pi)** to resume later.
 
-If setup installs WSL, restart Windows if prompted, open Ubuntu once to create a user, then run setup again. If Obsidian is already open, close it once so setup can register your new notebook. The first install downloads dependencies; later launches reuse them.
+If setup installs WSL, restart if prompted, open Ubuntu once to create a user, then run setup again. Close Obsidian once if setup asks to register the new vault.
 
-## Use it
+**Ubuntu 24.04 (core tutor):** Download and extract the repository, then run from its folder:
 
-Open **Start Learning (Pi)** on your desktop to resume. Keep Pi and Obsidian side by side.
+```bash
+bash work/bootstrap.sh
+bash work/start-learning.sh
+```
 
-- **`/learn <topic>`** — start a lesson.
-- **F4** in a quiz note, or **`/voice`** — talk through your reasoning and review the transcript before submitting.
-- **`/materials`** — use your own class notes and documents.
-- **`/map`** — see your learning plan.
-- **`/review`** — practice from your saved progress.
-- **`/lock <goal>`** — optional study mode. [Details and emergency recovery](docs/Study-mode.md).
+Install Obsidian separately and open `outputs/Learning Vault` as a vault. Desktop shortcuts, voice integration and window focus mode currently require Windows. Other platforms are not tested.
 
-Your notes, credentials and recordings are excluded from Git. Voice transcription runs locally; submitted text goes to your chosen AI provider.
+## Learn
 
-[Setup options and checks](docs/Setup-and-development.md) · [Sources and attribution](THIRD-PARTY.md)
+Type `/learn <your goal>` — for example, understanding recursion, evaluating historical evidence or learning calculus. Optionally fill in **Learner Profile** with your goals, preferred language, experience and constraints. A school, teacher or syllabus is not required.
+
+- `/materials` — use your own notes and documents.
+- `/notes` — open the current Obsidian note.
+- `/map` — see the agreed learning plan.
+- `/review` — practice from saved progress.
+- **F4** in a quiz note, or `/voice` — local English dictation on Windows; review the transcript before submitting.
+- `/lock <goal>` — optional Windows study focus mode. [Details and recovery](docs/Study-mode.md).
+
+Your notes, credentials and recordings are excluded from Git. Submitted text goes to your chosen AI provider. The teaching method keeps the video's foundations, motivated discovery and **probe → plan → teach** principles; added progress and focus tools support that method.
+
+[Setup and checks](docs/Setup-and-development.md) · [Contributing](CONTRIBUTING.md) · [Attribution](THIRD-PARTY.md)
 
 Based on [Amos Blomqvist's learn](https://github.com/amosblomqvist/learn) and Eero Alvar's *How I Use AI to Learn Things*.

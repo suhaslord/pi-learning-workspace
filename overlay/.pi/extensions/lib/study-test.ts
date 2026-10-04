@@ -28,7 +28,7 @@ export function assessAttempt(state: StudyState, attempt: Attempt | undefined, k
 	const fail = (message: string) => { delete state.passed[kind]; return message; };
 	if (attempt.status !== "answered" || attempt.correct !== true || attempt.dontKnow) return fail("This check did not pass. Repair the gap and ask a fresh question at the same level.");
 	if (!attempt.note?.trim()) return fail("A correct selection needs the learner's reasoning in the Note. Ask a fresh check with an explanation.");
-	if (!sound || review.trim().length < 12) return fail("The reasoning is unresolved. Clarify transcribed math or repair the misconception, then ask a fresh check.");
+	if (!sound || review.trim().length < 12) return fail("The reasoning is unresolved. Clarify transcribed terms or notation, or repair the misconception, then ask a fresh check.");
 	const normalized = (question: string) => question.trim().replace(/\s+/g, " ").toLowerCase();
 	if (Object.values(state.passed).some(check => check?.id === attempt.id || normalized(check!.question) === normalized(attempt.question))) {
 		return "This attempt or question already counted. Use a different problem.";

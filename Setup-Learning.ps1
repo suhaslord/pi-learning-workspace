@@ -5,12 +5,10 @@ param(
     [switch]$StartOnly,
     [switch]$SkipVoice,
     [switch]$SkipBrowser,
-    [string]$Distro = 'Ubuntu-24.04',
-    [string]$ExistingWorkspace
+    [string]$Distro = 'Ubuntu-24.04'
 )
 $ErrorActionPreference = 'Stop'
 $taskRoot = $PSScriptRoot
-if ($ExistingWorkspace) { $taskRoot = (Resolve-Path -LiteralPath $ExistingWorkspace).Path }
 function Invoke-LearningCommand {
     param([string]$Executable, [string[]]$Arguments)
     & $Executable @Arguments
@@ -42,22 +40,6 @@ function Get-LearningPython {
     return $null
 }
 $taskObsidian = Join-Path $env:LOCALAPPDATA 'Programs\Obsidian\Obsidian.exe'
-$taskOriginalLauncher = Join-Path $taskRoot 'outputs\Start-Learning.cmd'
-$taskRuntime = Join-Path $taskRoot 'work\runtime\pi\node_modules\@earendil-works\pi-coding-agent\package.json'
-# Attaching the setup shortcut to an existing workspace never replaces its settings or progress.
-if ($ExistingWorkspace) {
-    if (-not (Test-Path -LiteralPath $taskOriginalLauncher) -or -not (Test-Path -LiteralPath $taskRuntime)) {
-        throw 'The selected existing workspace is not installed. Run setup in a fresh copy of this repository instead.'
-    }
-    Push-Location $taskRoot
-    try { Invoke-LearningCommand 'wsl.exe' @('-d', $Distro, '--', 'bash', 'work/start-learning.sh', '--check') }
-    finally { Pop-Location }
-    if (-not (Test-Path -LiteralPath $taskObsidian)) { throw 'Obsidian is missing from the existing installation.' }
-    if (-not $CheckOnly) { New-LearningShortcut 'Set Up Learning' (Join-Path $PSScriptRoot 'Setup-Learning.ps1') ('-ExistingWorkspace "' + $taskRoot + '"') }
-    Write-Host 'Your existing learning workspace is ready. Notes, credentials and lesson progress were preserved.'
-    if (-not $NoLaunch -and -not $CheckOnly) { Start-Process -FilePath $taskOriginalLauncher -WorkingDirectory $taskRoot }
-    return
-}
 if ($CheckOnly) {
     Push-Location $taskRoot
     try { Invoke-LearningCommand 'wsl.exe' @('-d', $Distro, '--', 'bash', 'work/bootstrap.sh', '--check') }
