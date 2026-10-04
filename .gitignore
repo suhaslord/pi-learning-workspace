@@ -1,0 +1,23 @@
+# Local installs, AI credentials, student data and downloaded third-party sources.
+.pi/
+outputs/
+work/runtime/
+work/pi-agent/
+work/pi-interactive-subagents/
+work/study-lock/
+work/downloads/
+.install-state.json
+.setup.lock/
+.env
+.env.*
+*.wav
+*.mp3
+*.pyc
+__pycache__/
+node_modules/
+.venv/
+.obsidian/
+!templates/vault/.obsidian/
+!templates/vault/.obsidian/*.json
+!overlay/.pi/
+!overlay/.pi/**

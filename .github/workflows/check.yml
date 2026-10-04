@@ -1,0 +1,23 @@
+name: Learning workflow checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install core tools without browser or voice downloads
+        run: bash work/bootstrap.sh --skip-browser
+      - name: Check isolated learning fixtures
+        shell: bash
+        run: |
+          source work/learning-env.sh
+          node work/check-learning-runtime.mjs
+          node work/check-learning-workflow.mjs
+          node work/check-terminal-math.mjs
+          node work/check-quiz-integrity.mjs
+          node work/check-voice-notes.mjs
+          .pi/extensions/visual-tools/node_modules/.bin/tsc -p work/tsconfig.math.json

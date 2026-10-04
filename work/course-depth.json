@@ -1,0 +1,681 @@
+{
+  "u1-numerical-limits": {
+    "motivation": "How can nearby values suggest an output when direct evaluation is unavailable?",
+    "reasoning": ["Separate the fixed approach point from varying sample inputs.", "Construct left and right tables with successively closer inputs; interpret the output trend, not a single rounded entry.", "Explain why a finite table suggests a limit but cannot prove it; connect later analytic verification to this uncertainty."],
+    "workedExample": "A removable-hole rational function: build both-sided tables, predict the limit, then compare with a separately assigned point value.",
+    "contrast": "Compare a removable hole with a jump or oscillating near-point values; explain why rounding can conceal failure.",
+    "transfer": "Given a misleading sparse table, identify what is justified, what remains untested, and which additional check would matter."
+  },
+  "u1-graphical-limits": {
+    "motivation": "Why does approaching a point on a graph differ from reading the point itself?",
+    "reasoning": ["Trace input motion from each side and identify the corresponding output motion.", "Distinguish open/closed points from the height approached by the neighboring curve.", "Combine matching one-sided behavior into a two-sided limit and translate the visual statement into notation."],
+    "workedExample": "A graph with a hole, a relocated filled point and two different branch heights; justify each requested quantity separately.",
+    "contrast": "Change only the filled point, then change a nearby branch; identify which change affects a limit.",
+    "transfer": "Construct a graph satisfying specified point values and one-sided limits, and explain each feature."
+  },
+  "u1-one-two-sided-limits": {
+    "motivation": "What must agree for one output to describe approaches from both directions?",
+    "reasoning": ["Define the left and right approach without evaluating at the approach point.", "Compare their finite values and connect equality to two-sided existence.", "Separate disagreement, unbounded behavior and domain restrictions; use the class's endpoint conventions explicitly."],
+    "workedExample": "Read a jump graph and evaluate a two-branch expression at its joining input.",
+    "contrast": "Equal one-sided limits with a different point value versus unequal sides with a defined point.",
+    "transfer": "Choose a branch parameter making a finite two-sided limit exist and justify the equality imposed."
+  },
+  "u1-graphical-limits-of-compositions-of-functions": {
+    "motivation": "Which side of an outer graph does an inner function actually lead us toward?",
+    "reasoning": ["Track inner outputs as the original input approaches from the specified side.", "Determine whether those outputs approach the outer input from above, below or through several behaviors.", "Inspect the corresponding outer branch and any exact hits of a discontinuity; state when a composition-limit theorem really applies."],
+    "workedExample": "Two supplied graphs with an inner turning point and an outer jump; track the inputs before reading the composite limit.",
+    "contrast": "An inner function approaching a jump from opposite sides, or taking the exceptional input repeatedly, can defeat blind substitution.",
+    "transfer": "Explain why knowing both separate limits can still be insufficient for a composite when the necessary outer continuity/approach conditions fail."
+  },
+  "u1-properties-and-linearity-of-limits": {
+    "motivation": "When can complicated limiting behavior be assembled from simpler known limits?",
+    "reasoning": ["Identify the finite limits the proposed law requires.", "Build sums, constant multiples and products from those limits, stating each law used.", "For quotients, check the denominator's nonzero limiting value; distinguish missing hypotheses from a conclusion that happens to be true."],
+    "workedExample": "Assemble a rational combination from given component limits and justify every substitution.",
+    "contrast": "A denominator tending to zero or components without separate finite limits blocks the usual law.",
+    "transfer": "Audit a proposed limit argument, name the first unsupported law, and suggest an in-scope repair."
+  },
+  "u1-analytic-limits-of-analytic-functions": {
+    "motivation": "Why can an expression fail at a point while its neighboring behavior is easy to describe?",
+    "reasoning": ["Check direct substitution and the original domain first.", "Choose factoring, conjugates or a common denominator based on the actual obstruction.", "Explain equality away from the exceptional point and use it to evaluate the limit without redefining the original function."],
+    "workedExample": "A factored removable discontinuity followed by a radical expression requiring a conjugate.",
+    "contrast": "Cancelling factors is legitimate; cancelling terms across a sum is not.",
+    "transfer": "Select and justify the appropriate transformation for an unfamiliar algebraic expression rather than applying a memorized recipe."
+  },
+  "u1-limits-involving-infinity": {
+    "motivation": "How does a graph describe growth without bound instead of approaching a real number?",
+    "reasoning": ["Distinguish the location being approached from the size of the outputs.", "Analyze numerator/denominator signs on each relevant side of a zero.", "Connect one-sided infinite behavior to notation while explaining that infinity is not an ordinary function value."],
+    "workedExample": "Compare reciprocals with odd and even denominator powers near a vertical obstruction.",
+    "contrast": "An undefined expression alone does not establish an infinite limit; a hole can have a finite limit.",
+    "transfer": "Use a sign chart and graph sketch to justify both one-sided behaviors of a new rational expression."
+  },
+  "u1-limits-of-rational-functions-at-infinity": {
+    "motivation": "Why do highest-degree terms control long-run rational behavior?",
+    "reasoning": ["Reconnect degree-based predictions to factoring and dividing by a suitable power of the input.", "Show explicitly which lower-order ratios tend to zero.", "Evaluate positive and negative infinity separately when sign or unbounded behavior matters; state the resulting asymptote or absence of one."],
+    "workedExample": "Develop the equal-degree case, then compare unequal degrees through the same algebra.",
+    "contrast": "A degree shortcut predicts a case but does not show sign or justify the vanished terms.",
+    "transfer": "Explain a negative-infinity case with an odd dominant power and defend the transformation used."
+  },
+  "u1-asymptotic-comparison": {
+    "motivation": "What does it mean for one growth rate to dominate another?",
+    "reasoning": ["Compare functions through a ratio on a stated long-run domain.", "Use only established growth facts or an in-scope limit argument, distinguishing positive growth from sign effects.", "Translate the ratio's limiting behavior into domination and explain why a finite graph window is not proof."],
+    "workedExample": "Compare two polynomial expressions algebraically, then interpret an established exponential-versus-power result.",
+    "contrast": "A function can be larger near one input and still grow more slowly eventually.",
+    "transfer": "Justify a proposed growth ordering and identify any comparison requiring a theorem not yet introduced."
+  },
+  "u1-limit-definition-of-asymptotes": {
+    "motivation": "Which limiting statements justify drawing a horizontal or vertical asymptote?",
+    "reasoning": ["Write the limit associated with each candidate asymptote.", "Connect infinite behavior near a finite input to a vertical asymptote and finite long-run output to a horizontal one.", "Check each side/end separately and distinguish an asymptote from a removable hole or a line the graph can never cross."],
+    "workedExample": "Analyze a rational function containing both a cancelled factor and a remaining denominator zero.",
+    "contrast": "Crossing a horizontal asymptote is possible; a denominator zero does not automatically supply a vertical asymptote.",
+    "transfer": "Infer appropriate asymptote statements from a graph and construct a function meeting them."
+  },
+  "u1-limits-involving-indeterminate-forms": {
+    "motivation": "Why does the same apparent form lead to different limiting answers?",
+    "reasoning": ["Identify the form as a signal about incomplete information, not as a numerical answer.", "Construct simple expressions with the same form but different rates of approach.", "Choose an allowed transformation that exposes relative behavior and verify the resulting limit; reserve L'Hôpital for its later lesson."],
+    "workedExample": "Use a rationalized difference of radicals to reveal the term hidden by an infinity-minus-infinity appearance.",
+    "contrast": "Compare zero-over-zero examples with a finite, infinite or nonexistent limit.",
+    "transfer": "Classify a new form, explain why it is inconclusive, and defend a class-appropriate resolution."
+  },
+  "u1-limits-involving-transcendental-functions": {
+    "motivation": "Which established facts allow limit operations on trig, exponential and logarithmic expressions?",
+    "reasoning": ["Identify the function family and its real domain.", "Check the continuity/composition facts actually available at this point in Armstrong's course.", "Apply a justified law or established special limit and explicitly label a missing theorem rather than assuming every algebraic result transfers."],
+    "workedExample": "Compare a direct-substitution continuous composition with a log-domain boundary case.",
+    "contrast": "A familiar-looking expression can fall outside the stated real domain or the scope of a theorem.",
+    "transfer": "Audit a proposed transcendental limit solution for domain and theorem-scope errors."
+  },
+  "u1-sandwich-theorem": {
+    "motivation": "Can we determine a hard limit by trapping it between easier quantities?",
+    "reasoning": ["Build bounds that hold throughout a punctured neighborhood, with inequality reversals handled correctly.", "Establish that both bounding functions approach the same value.", "Explain why the trapped function must follow, even if its own values oscillate."],
+    "workedExample": "Bound a small factor multiplying a bounded oscillatory function without assigning the oscillation its own limit.",
+    "contrast": "Bounds with unequal limiting values constrain behavior but do not establish a unique limit.",
+    "transfer": "Choose valid bounds for a changed oscillatory expression and justify why every hypothesis applies."
+  },
+  "u1-special-trigonometric-limits": {
+    "motivation": "What geometric fact explains the basic near-zero trig ratio?",
+    "reasoning": ["Use radian measure and the class's unit-circle comparison or accepted special-limit justification.", "Translate a changed inner angle to the standard near-zero form and account for every scale factor.", "Derive a related limit with identities or conjugates rather than memorizing an unrelated result."],
+    "workedExample": "A scaled sine ratio followed by a cosine-difference ratio resolved through a justified identity.",
+    "contrast": "Degrees or an unaccounted inner coefficient change the numerical scaling.",
+    "transfer": "Transform a nested trig limit to established forms and explain the role of each coefficient."
+  },
+  "u1-limits-involving-piecewise-functions-and-absolute-value": {
+    "motivation": "Why does approaching from a different direction sometimes change the formula?",
+    "reasoning": ["Identify the branch or absolute-value sign applicable in each approach interval.", "Compute each side using its own valid expression and compare results.", "Separate the isolated point's assigned value from the nearby behavior; solve parameter conditions only after setting up those comparisons."],
+    "workedExample": "Rewrite an absolute-value quotient on both sides, then analyze a parameterized piecewise join.",
+    "contrast": "The branch containing equality at the endpoint need not govern the approaching inputs.",
+    "transfer": "Construct or repair a piecewise function with prescribed one-sided limits and explain each branch choice."
+  },
+  "u1-graphical-continuity-and-discontinuities": {
+    "motivation": "How can a graph fail to connect even when some nearby behavior looks well behaved?",
+    "reasoning": ["Read the defined point value and each approaching branch separately.", "Apply the equality of point value and two-sided limit that continuity requires.", "Classify removable, jump and infinite discontinuities from the actual failure, without relying only on a drawing slogan."],
+    "workedExample": "Compare a hole, a relocated filled point, a jump and an infinite branch on supplied graphs.",
+    "contrast": "A limit can exist at a discontinuity, and a defined point does not by itself make a function continuous.",
+    "transfer": "Describe the smallest graph change that repairs a removable discontinuity and why a jump cannot be repaired by one point value."
+  },
+  "u1-analytic-continuity-and-discontinuities": {
+    "motivation": "What equations replace the visual continuity check for a formula or branch join?",
+    "reasoning": ["Determine the actual domain and any exceptional input.", "Calculate left/right limits at a join and identify the assigned point value.", "Impose their equality for continuity, retaining domain restrictions and checking any proposed parameter solution in the original function."],
+    "workedExample": "Choose parameters at a piecewise join and distinguish a removable rational hole from a genuine pole.",
+    "contrast": "Matching branch values at an irrelevant input or cancelling away a domain restriction can produce a false repair.",
+    "transfer": "Justify continuity on an interval with more than one possible obstruction, including endpoint conventions."
+  },
+  "u1-intermediate-value-theorem-ivt": {
+    "motivation": "Try to move continuously between two endpoint heights while skipping a height between them.",
+    "reasoning": ["Contrast a discontinuous construction with the obstruction faced by a continuous one.", "State continuity on the closed interval and identify a target between the endpoint values.", "Translate the guarantee into existence, distinguishing it from uniqueness or an exact location."],
+    "workedExample": "Bracket a root of a continuous function and write a complete existence justification.",
+    "contrast": "A jump can skip a target; matching endpoint signs or values without interval continuity does not establish the guarantee.",
+    "transfer": "Decide which of several interval/target combinations is justified and explain what IVT cannot conclude."
+  },
+  "u2-limit-definition-of-the-derivative": {
+    "motivation": "How can slopes over intervals determine a slope or rate at one instant?",
+    "reasoning": ["Build a signed change-in-output over change-in-input quotient at a fixed evaluation point.", "Simplify the quotient for nonzero increments without substituting zero into an undefined expression.", "Take a finite limiting slope and connect it to the tangent/rate interpretation; show equivalent increment and approaching-input forms."],
+    "workedExample": "Derive the derivative of a simple polynomial from the definition with every cancellation justified.",
+    "contrast": "A secant slope at a nonzero step or a function value at the point is not the derivative.",
+    "transfer": "Recognize a disguised difference quotient and identify its function, evaluation input and derivative meaning."
+  },
+  "u2-tangent-lines-and-instantaneous-rate-of-change": {
+    "motivation": "Which single line captures the local rate of a differentiable curve?",
+    "reasoning": ["Find the point on the original curve and the derivative at that input.", "Build the tangent equation in point-slope form and interpret its slope with appropriate units.", "Distinguish this instantaneous rate from a secant average over an interval and check domain/differentiability."],
+    "workedExample": "Build a tangent equation from a formula, then from supplied point-and-derivative information.",
+    "contrast": "Using the derivative as the point's height or using the tangent intercept as the curve point mixes distinct quantities.",
+    "transfer": "Translate a contextual instantaneous-rate request into the correct derivative and tangent data."
+  },
+  "u2-derivative-notation": {
+    "motivation": "How can notation keep track of the function, variable and evaluation point without changing the concept?",
+    "reasoning": ["Distinguish a derivative function from its value at a particular input.", "Translate prime, Leibniz and operator notation, tracking the dependent and independent variables.", "Connect higher-order notation to repeated differentiation and explain the limits of fraction-like intuition."],
+    "workedExample": "Translate the same rate among f'(x), f'(a), dy/dx and an evaluated derivative expression.",
+    "contrast": "A second derivative is not the square of a first derivative, and dy/dx is not an ordinary numerical fraction.",
+    "transfer": "Interpret unfamiliar contextual derivative notation with its units and evaluation point."
+  },
+  "u2-linearity-of-differentiation": {
+    "motivation": "Why can separate contributions to a function's change be combined at the derivative level?",
+    "reasoning": ["Write the difference quotient of a sum or constant multiple.", "Separate its algebra and apply the finite-limit laws under differentiability assumptions.", "Connect the result to term-by-term differentiation while explaining why it says nothing about arbitrary products or compositions."],
+    "workedExample": "Derive the sum/constant-multiple pattern, then use it on a mixed polynomial expression.",
+    "contrast": "A coefficient depending on the input is not a constant multiplier.",
+    "transfer": "Identify exactly which pieces can be separated in a new derivative expression and which need another rule."
+  },
+  "u2-power-rule-for-derivatives": {
+    "motivation": "What pattern in repeated polynomial difference quotients avoids starting over for every power?",
+    "reasoning": ["Develop a simple integer-power case from the definition and identify the surviving term.", "Explain the justified scope of the power rule, using the source's extension to other exponents rather than pretending one proof covers every case.", "Apply coefficients and domain restrictions and distinguish a bare input power from a composite power needing the chain rule."],
+    "workedExample": "Connect an integer-power derivation to a polynomial and a fractional/negative-power example within the real domain.",
+    "contrast": "Differentiating a power of an inner function without its inner derivative misses a dependency.",
+    "transfer": "Differentiate a rewritten root/reciprocal expression and state the domain on which the rule is being used."
+  },
+  "u2-product-rule-for-derivatives": {
+    "motivation": "If two factors both change, which first-order contributions change their product?",
+    "reasoning": ["Use an exact add-and-subtract decomposition of the product difference quotient.", "Apply differentiability and the continuity it implies to evaluate the resulting limits.", "Explain the two retained contributions and why a product of derivatives is generally the wrong operation."],
+    "workedExample": "Derive the rule structurally, then differentiate a product where either expansion or the product rule can verify the result.",
+    "contrast": "Compare the incorrect product-of-derivatives rule with a simple counterexample, then check a constant-factor special case.",
+    "transfer": "Use a table of function/derivative values to find a product derivative and explain each evaluation."
+  },
+  "u2-quotient-rule-for-derivatives": {
+    "motivation": "How does changing a denominator affect a ratio differently from changing its numerator?",
+    "reasoning": ["Rewrite a quotient as a product with a reciprocal or use the source's justified difference-quotient argument.", "Track the negative denominator contribution and the nonzero denominator condition.", "Explain the squared denominator and verify the sign/order by differentiating a simple quotient another way."],
+    "workedExample": "A polynomial quotient with shown numerator grouping, followed by evaluation at a valid input.",
+    "contrast": "Derivatives do not ordinarily divide, and reversing the two numerator terms changes the sign.",
+    "transfer": "Resolve a quotient derivative from tabulated data while checking denominator and domain conditions."
+  },
+  "u2-chain-rule": {
+    "motivation": "Avoid expanding a composite polynomial or trying to directly differentiate a nested trig expression from scratch.",
+    "reasoning": ["Name the original input, inner output and outer output and connect their rates of change.", "Use Armstrong's intuition as intuition, then inspect a justified chain-rule argument with differentiability assumptions; do not treat small-over-small reasoning or notation cancellation as proof.", "Evaluate the outer derivative at the inner output and preserve every inner factor in deeper compositions."],
+    "workedExample": "A two-layer power followed by a multi-layer exponential/trig composition, with every layer labeled before calculation.",
+    "contrast": "A correct outer derivative at the wrong input, or one missing middle layer, produces a wrong result.",
+    "transfer": "Use a graph/table composition derivative and explain which input belongs to each derivative factor."
+  },
+  "u2-implicit-differentiation": {
+    "motivation": "Can a curve have a local tangent even when solving explicitly for its output is inconvenient?",
+    "reasoning": ["Treat the dependent variable as a local function of the input wherever the requested derivative exists.", "Differentiate each term with its dependencies visible, including product and chain contributions.", "Collect derivative terms, solve locally and check the original curve point and any denominator obstruction."],
+    "workedExample": "Differentiate a circle relation, then a relation with a mixed product, showing why every y term carries its dependency.",
+    "contrast": "A point off the curve or a vanished denominator can invalidate a proposed finite slope.",
+    "transfer": "Find and interpret a tangent or vertical-tangent candidate on a changed implicit curve with a stated point."
+  },
+  "u2-derivatives-of-inverse-functions": {
+    "motivation": "How should a local rate change when input and output roles are reversed?",
+    "reasoning": ["Match the original point and the swapped inverse point on the stated one-to-one domain.", "Differentiate the inverse identity under the relevant differentiability/nonzero-slope assumptions.", "Explain the reciprocal slope at the corresponding original input, not at an unrelated input."],
+    "workedExample": "Obtain an inverse derivative from original-function table values without solving for the inverse formula.",
+    "contrast": "An original zero slope can obstruct a finite inverse derivative, and f'(a) need not be the needed evaluation.",
+    "transfer": "Combine inverse-point matching with a composition derivative and justify both evaluation locations."
+  },
+  "u2-higher-order-derivatives": {
+    "motivation": "What does the rate of change of a rate tell us about the original behavior?",
+    "reasoning": ["Differentiate the newly obtained derivative function, maintaining its variable dependencies.", "Translate first, second and higher-order notation without confusing powers with derivative order.", "Interpret derivative units and distinguish what a second derivative says from what the first derivative says."],
+    "workedExample": "Repeated differentiation of a mixed/composite expression with an intermediate check of each derivative.",
+    "contrast": "Squaring the first derivative or reusing the original function as the next target is not repeated differentiation.",
+    "transfer": "Interpret or compute a second derivative from an implicit or contextual first-derivative relation within scope."
+  },
+  "u2-derivatives-of-exponential-and-logarithmic-functions": {
+    "motivation": "Why do different exponential/logarithmic bases introduce different rate constants?",
+    "reasoning": ["Connect the natural-base derivative to the source's established defining limit or theorem.", "Use base conversion and the chain rule to justify the corresponding base-a factors.", "Track real logarithm domains, constants and inner derivatives and check the resulting formulas on permitted inputs."],
+    "workedExample": "Contrast a base-a exponential with a base-a logarithm, then apply each to a nontrivial inner function.",
+    "contrast": "Dropping the logarithmic base factor or using a log derivative outside its real domain gives an unjustified answer.",
+    "transfer": "Choose and explain the derivative structure for a mixed log/exponential expression, retaining every composition layer."
+  },
+  "u2-derivatives-of-sine-and-cosine": {
+    "motivation": "How do established near-zero trig limits create the familiar derivative patterns?",
+    "reasoning": ["Use angle-addition identities in the sine/cosine difference quotient.", "Apply the justified special trig limits in radians and track signs.", "Connect the results to phase/graph behavior, then add the inner derivative for composed angles."],
+    "workedExample": "Develop one basic trig derivative from the definition and use it on a scaled-angle function.",
+    "contrast": "A cosine derivative sign error or an omitted angle coefficient contradicts the local slope behavior.",
+    "transfer": "Translate a trig graph's slope information or a nested angle into a derivative with a justified sign."
+  },
+  "u2-derivatives-of-more-trigonometric-functions": {
+    "motivation": "Can reciprocal and quotient trig derivatives be reconstructed from sine and cosine?",
+    "reasoning": ["Rewrite the target trig function as a ratio or reciprocal on its valid domain.", "Apply already justified quotient/chain rules and simplify through valid trig identities.", "Track signs and composition factors so the resulting formulas remain connected to their derivation."],
+    "workedExample": "Derive tangent and one reciprocal-trig derivative, then use a composed argument.",
+    "contrast": "Confusing reciprocal functions with inverse functions or dropping negative signs changes the function being differentiated.",
+    "transfer": "Reconstruct a forgotten derivative from sine/cosine rather than guessing a formula."
+  },
+  "u2-derivatives-of-inverse-trigonometric-functions": {
+    "motivation": "How do restricted trig inverses turn inverse-function slopes into algebraic expressions?",
+    "reasoning": ["State the principal-value restriction and input domain of the chosen inverse trig function.", "Differentiate its defining trig identity and use the restriction to choose the correct square-root sign.", "Apply the chain rule and identify endpoints where the finite derivative formula does not apply."],
+    "workedExample": "Derive an arcsine or arctangent derivative from its identity, then differentiate an inner polynomial composition.",
+    "contrast": "An inverse trig function is not a reciprocal trig function; endpoint/domain and square-root signs matter.",
+    "transfer": "Explain the derivative and domain of a changed inverse-trig composition without relying solely on recognition."
+  },
+  "u2-graphical-differentiability": {
+    "motivation": "Which local graph features prevent one finite tangent slope from describing the point?",
+    "reasoning": ["Screen continuity before comparing slopes.", "Track one-sided signed secant slopes and distinguish equal finite slopes from a corner, cusp or unbounded slope.", "Translate graph evidence into derivative existence or failure without treating a vertical tangent as a finite derivative."],
+    "workedExample": "Compare a smooth point, corner, cusp, vertical tangent and discontinuity using local slope behavior.",
+    "contrast": "Continuity can hold while the derivative fails, and visually steep is not itself proof of unbounded slopes.",
+    "transfer": "Classify a changed graph or local data set and justify the decisive continuity/slope evidence."
+  },
+  "u2-analytic-differentiability": {
+    "motivation": "What equations make two formulas join with a common finite local slope?",
+    "reasoning": ["Establish continuity at the join from values and one-sided limits.", "Use one-sided derivative limits at that point, not unexamined endpoint substitution into branch derivatives.", "Impose equal finite slopes and check solved parameters in both continuity and derivative conditions."],
+    "workedExample": "A parameterized piecewise join requiring distinct value and slope conditions.",
+    "contrast": "Matching slopes without matching values does not establish differentiability; equal unbounded slopes are not a finite derivative.",
+    "transfer": "Explain why a changed join fails or succeeds using the definition and all required conditions."
+  },
+  "u3-tangent-lines-and-normal-lines": {
+    "motivation": "What local geometry connects a curve's tangent with a line perpendicular to it?",
+    "reasoning": ["Identify the actual curve point and a valid finite or vertical tangent direction.", "Derive the perpendicular-slope relationship when both slopes are finite and handle horizontal/vertical cases separately.", "Build each line through the same point and check the equations geometrically."],
+    "workedExample": "A tangent/normal pair at an ordinary point followed by a horizontal-tangent special case.",
+    "contrast": "Taking the negative reciprocal of zero or using a normal slope at the wrong point breaks the geometry.",
+    "transfer": "Use implicit-curve or table information to justify both local line equations."
+  },
+  "u3-linear-approximations": {
+    "motivation": "Why is the tangent line useful for estimating a nearby function value?",
+    "reasoning": ["Build the tangent model from the base value and slope.", "Connect a small input change to the predicted output change, distinguishing the model from the exact function.", "Use available concavity information to justify error direction without inventing an error bound."],
+    "workedExample": "Estimate a nearby root or function value from a convenient base point and interpret the estimate.",
+    "contrast": "Using the target input as the base, omitting the base value or claiming exact equality changes the approximation.",
+    "transfer": "Choose a useful base point for a changed estimation request and defend any over/underestimate claim."
+  },
+  "u3-critical-points": {
+    "motivation": "Where can an interior extremum occur, and why are those locations only candidates?",
+    "reasoning": ["Connect an interior differentiable extremum to the necessary zero-slope condition.", "Include domain-valid points where the derivative does not exist and distinguish them from points outside the function's domain.", "Explain why candidate status alone does not establish an extremum."],
+    "workedExample": "List candidates for a function with both stationary and nondifferentiable domain points.",
+    "contrast": "Compare a stationary inflection, an absolute-value corner and a pole outside the domain.",
+    "transfer": "Audit a candidate list and justify exactly which omitted or included locations are valid."
+  },
+  "u3-monotonicity": {
+    "motivation": "How do local derivative signs tell us which way a function moves over an interval?",
+    "reasoning": ["Connect derivative sign to local change and use the appropriate interval theorem to justify monotonic behavior.", "Build a sign chart split at critical points and domain breaks.", "State increasing/decreasing intervals for the original function rather than confusing them with behavior of its derivative."],
+    "workedExample": "A factored derivative sign chart with a domain restriction.",
+    "contrast": "A derivative increasing or positive at one point alone does not establish the requested behavior over an interval.",
+    "transfer": "Infer monotonic intervals from a derivative graph and explain how a domain break changes the answer."
+  },
+  "u3-first-derivative-test": {
+    "motivation": "What change in direction makes a critical point a local high or low?",
+    "reasoning": ["Find domain-valid candidates and signs immediately on both sides.", "Connect positive-to-negative and negative-to-positive derivative changes to function behavior.", "Distinguish unchanged signs and unsupported derivative data from an established extremum."],
+    "workedExample": "Classify three candidates with different derivative sign patterns.",
+    "contrast": "A zero derivative with no sign change can be neither a local maximum nor a local minimum.",
+    "transfer": "Justify extrema from a derivative graph, including a nondifferentiable candidate."
+  },
+  "u3-concavity-and-inflection-points": {
+    "motivation": "How is a slope getting larger different from a function getting larger?",
+    "reasoning": ["Connect concavity to how first-derivative slopes change.", "Use second-derivative signs on intervals and account for domain/regularity restrictions.", "Require a concavity change at an appropriate function point before declaring an inflection."],
+    "workedExample": "Read a derivative graph for concavity, then analyze second-derivative signs for a formula.",
+    "contrast": "A zero second derivative is only a candidate; a point outside the domain is not an inflection point of the function.",
+    "transfer": "Explain how a function can be decreasing and concave up, using signs and a compatible sketch."
+  },
+  "u3-second-derivative-test": {
+    "motivation": "When can local curvature settle the classification of a stationary point?",
+    "reasoning": ["Establish the stationary-point and theorem regularity hypotheses.", "Connect positive/negative second derivative to a local low/high via changing slopes.", "Explain why a zero or unavailable second derivative makes this test inconclusive and choose a legitimate alternative."],
+    "workedExample": "Compare positive, negative and zero second derivatives at stationary candidates.",
+    "contrast": "A zero second derivative can accompany a maximum, minimum or neither; it does not supply one classification.",
+    "transfer": "Decide which test is justified for a changed function and defend the conclusion when one test fails."
+  },
+  "u3-candidates-test": {
+    "motivation": "Why can a local extremum test miss the largest or smallest value on a whole interval?",
+    "reasoning": ["Check the interval/domain and the existence guarantee, such as continuity on a closed bounded interval.", "Collect interior critical candidates and relevant endpoints.", "Compare actual function values and distinguish a global value from where it is attained; handle open/unbounded domains without an automatic guarantee."],
+    "workedExample": "Find absolute extrema on a closed interval with interior candidates and an endpoint winner.",
+    "contrast": "Comparing derivative values or omitting endpoints does not compare the original function's candidate heights.",
+    "transfer": "Explain what changes when an endpoint is excluded or a domain gap is introduced."
+  },
+  "u3-function-analysis-with-graphs": {
+    "motivation": "How much can a graph of one derivative reveal about the original function?",
+    "reasoning": ["Name which function is actually graphed before interpreting heights or slopes.", "Translate derivative signs/changes into monotonicity, extrema and concavity of the original function.", "Separate information determined by derivative data from heights or constants that need additional function information."],
+    "workedExample": "Annotate an f' graph with justified conclusions about f and possible missing information.",
+    "contrast": "A high point on f' need not be a high point on f, and its zero need not establish an extremum.",
+    "transfer": "Draw two different original functions compatible with the same derivative graph and explain the common features."
+  },
+  "u3-sketching-curves": {
+    "motivation": "How can local slope information and long-run behavior form one consistent global sketch?",
+    "reasoning": ["Establish domain, intercepts, limiting behavior and asymptotes.", "Build derivative/concavity sign charts and classify valid candidates with the required tests.", "Combine the constraints into a sketch and check that each drawn feature agrees with the algebra."],
+    "workedExample": "Sketch a rational function with domain breaks, monotonic intervals and concavity changes.",
+    "contrast": "A visually plausible sketch can violate a sign chart, asymptote limit or known point.",
+    "transfer": "Locate and repair an inconsistency in a proposed curve sketch using the decisive calculation."
+  },
+  "u3-lhopitals-rule-quotients": {
+    "motivation": "When do relative numerator/denominator rates resolve an otherwise indeterminate quotient?",
+    "reasoning": ["Verify zero-over-zero or infinity-over-infinity form and inspect the actual theorem's differentiability, denominator-derivative and limiting requirements.", "Apply the rule to numerator and denominator derivatives as a theorem about limits, not as the quotient differentiation rule.", "Recheck conditions after each proposed repeated use and identify cases where a simpler in-scope method is preferable."],
+    "workedExample": "An eligible quotient followed by a repeated-use case with every new form checked.",
+    "contrast": "A finite nonindeterminate quotient cannot be resolved by casually dividing derivatives.",
+    "transfer": "Audit several proposed applications, identify the first missing hypothesis and repair a valid case."
+  },
+  "u3-lhopitals-rule-products": {
+    "motivation": "How can a product's competing factors be exposed as an eligible quotient?",
+    "reasoning": ["Identify the product's limiting form without assuming an answer.", "Choose a reciprocal rewrite on the relevant domain and verify the resulting quotient form.", "Apply justified L'Hôpital steps or a simpler known limit and reconnect the answer to the original expression."],
+    "workedExample": "Rewrite a zero-times-infinity log/power product and compare two possible quotient rewrites.",
+    "contrast": "Differentiating both factors and multiplying them is not L'Hôpital's rule.",
+    "transfer": "Choose and justify a useful rewrite for a changed indeterminate product without forcing the rule onto an ineligible form."
+  },
+  "u4-position-velocity-acceleration-and-speed": {
+    "motivation": "Which quantities describe where a particle is, its direction and how quickly its motion changes?",
+    "reasoning": ["Connect derivatives of position to signed velocity and derivatives of velocity to acceleration with units.", "Define speed as velocity's magnitude and distinguish direction from increasing position.", "Interpret each quantity at the requested time and separate zero velocity, zero acceleration and stopped-for-an-interval claims."],
+    "workedExample": "Analyze a position formula at selected times and explain each sign and unit.",
+    "contrast": "Negative velocity is not negative speed, and zero acceleration does not imply rest.",
+    "transfer": "Translate a contextual motion statement into the correct position/rate quantity and justify it from a changed representation."
+  },
+  "u4-speeding-up-and-slowing-down": {
+    "motivation": "Can negative acceleration make a moving particle faster?",
+    "reasoning": ["Connect speed to the magnitude of signed velocity.", "Explain away from zero velocity why matching velocity/acceleration signs increase that magnitude and opposite signs decrease it.", "Split time intervals at relevant zeros and treat zero-velocity instants as boundary cases instead of blindly applying a sign slogan."],
+    "workedExample": "Build a velocity/acceleration sign chart including motion in both directions.",
+    "contrast": "Increasing velocity and increasing speed are different when velocity is negative.",
+    "transfer": "Justify speeding-up intervals from a velocity graph using both height and slope."
+  },
+  "u4-graphs-of-linear-particle-motion": {
+    "motivation": "What different motion facts come from a graph's height and its slope?",
+    "reasoning": ["Identify whether position, velocity or acceleration is graphed and track its units.", "Translate heights, zeros and slopes into direction, rest, acceleration and changes in speed within derivative scope.", "Separate what is known from what needs additional initial information or later integration methods."],
+    "workedExample": "Read a velocity graph for direction, acceleration sign and speeding-up intervals.",
+    "contrast": "A graph crossing the horizontal axis means different things for position and velocity.",
+    "transfer": "Match compatible position/velocity/acceleration sketches and justify the selected pair by derivatives."
+  },
+  "u4-rates-of-change": {
+    "motivation": "How does a rate statement connect changing quantities to an actual measurement?",
+    "reasoning": ["Define each changing quantity, independent variable and unit.", "Distinguish average and instantaneous rates and translate the request into the correct quotient or derivative.", "Interpret positive/negative values and connect variable dependencies before setting up a more complex model."],
+    "workedExample": "Interpret a changing-volume or temperature rate with units and compare its interval average.",
+    "contrast": "A quantity's value, its average rate and its instantaneous rate are different data.",
+    "transfer": "Write and interpret the rate requested by a changed word problem before doing algebra."
+  },
+  "u4-solving-related-rates": {
+    "motivation": "Why do changing geometric quantities have linked rates even when only one rate is known?",
+    "reasoning": ["Draw/define the changing quantities and derive the relevant geometric relation.", "Differentiate that relation with respect to time while keeping all changing quantities variable.", "Substitute instantaneous measurements, solve for the target rate and interpret its sign/units."],
+    "workedExample": "A changing geometric configuration with one known rate, including an explicitly constant dimension.",
+    "contrast": "Substituting a changing length before differentiation erases its rate contribution.",
+    "transfer": "Build the model for a new geometry or orientation and explain which quantities are constant versus changing."
+  },
+  "u4-optimizing-functions": {
+    "motivation": "What distinguishes finding a stationary point from proving the best feasible value?",
+    "reasoning": ["State the objective function and its feasible domain.", "Find all appropriate interior/endpoint candidates with justified derivative and domain checks.", "Use value comparison or a suitable theorem/sign argument to establish the global conclusion, including possible nonattainment."],
+    "workedExample": "Optimize a one-variable function on a specified feasible interval with an endpoint comparison.",
+    "contrast": "A local maximum or one zero derivative need not be the global feasible maximum.",
+    "transfer": "Explain how changing the domain alters the optimum or whether it is attained."
+  },
+  "u4-optimizing-functions-in-context": {
+    "motivation": "How does a real constraint turn many design choices into one optimizable variable?",
+    "reasoning": ["Define the objective, constraints and physically feasible quantities from a diagram/context.", "Eliminate a dependent variable and justify the resulting one-variable domain.", "Find and compare feasible candidates, then interpret the optimum and dimensions in the original situation."],
+    "workedExample": "A fixed-resource area/volume problem with a fully derived model and feasibility check.",
+    "contrast": "Optimizing the wrong quantity or allowing negative/impossible dimensions can produce an algebraic answer unrelated to the problem.",
+    "transfer": "Change a resource or boundary condition, rebuild the objective and explain how the optimum must be rejustified."
+  },
+  "u5-riemann-sums": {
+    "motivation": "How can many small rate-times-width contributions approximate an accumulated amount?",
+    "reasoning": ["Partition the interval and identify actual widths and sample values.", "Build left/right/midpoint sums as signed contributions, including unequal widths in table data.", "Connect monotonicity to applicable over/under estimates and explain how refinement prepares the integral definition."],
+    "workedExample": "A table-based sum with unequal intervals, then a graph-based comparison of endpoint choices.",
+    "contrast": "The number of data points is not the number of subintervals, and a single common width may be unjustified.",
+    "transfer": "Set up a changed sampling convention and interpret the accumulated units and estimate direction."
+  },
+  "u5-trapezoid-rule": {
+    "motivation": "What improves when neighboring endpoint heights are joined instead of held flat?",
+    "reasoning": ["Derive each trapezoid contribution from width times mean endpoint height.", "Add contributions with correct endpoint weights and actual interval widths.", "Connect concavity to the direction of trapezoid error where justified, distinguishing it from the rectangle-sum monotonicity test."],
+    "workedExample": "Compute an unequal-width table approximation and interpret the units.",
+    "contrast": "A midpoint-height rectangle and an endpoint-average trapezoid are different approximations; increasing alone does not determine trapezoid error.",
+    "transfer": "Explain a proposed trapezoid calculation's incorrect weights or error-direction claim."
+  },
+  "u5-limit-definition-of-riemann-integrals": {
+    "motivation": "How does refining area approximations turn an estimate into a well-defined accumulated value?",
+    "reasoning": ["Specify the interval, partition widths and sample points in a Riemann sum.", "Explain shrinking maximum subinterval width and the need for a common limiting value under integrability assumptions.", "Connect the limit to definite-integral notation and distinguish signed accumulation from a single finite approximation."],
+    "workedExample": "Translate a uniform right-endpoint sum into an integral, then set up the reverse translation.",
+    "contrast": "Increasing the number of intervals without controlling their widths is not the complete general definition.",
+    "transfer": "Identify a function and interval from a disguised summation limit, including its scaling and sign."
+  },
+  "u5-geometric-evaluation-of-riemann-integrals": {
+    "motivation": "When does known geometry let us find an integral without an antiderivative?",
+    "reasoning": ["Break the graph into identifiable geometric regions over the actual bounds.", "Calculate area magnitudes and assign signs from position relative to the axis.", "Combine signed contributions and distinguish the integral from total geometric area."],
+    "workedExample": "A graph assembled from line segments and a circular arc spanning positive and negative regions.",
+    "contrast": "Adding every region as positive finds total area rather than the signed integral.",
+    "transfer": "Use a changed bound or symmetry argument and justify the corresponding integral value."
+  },
+  "u5-integration-with-respect-to-y": {
+    "motivation": "Why might horizontal rather than vertical slices describe a region more simply?",
+    "reasoning": ["Interpret dy as a small change in the integration variable and state the corresponding bounds.", "Express the relevant quantity in terms of y and identify right/left boundaries when calculating area.", "Set up and interpret the sum/integral consistently without mixing x-bounds with a y-integrand."],
+    "workedExample": "Describe the same simple region with horizontal slices and compare the vertical setup.",
+    "contrast": "Renaming dx to dy without rewriting the functions and bounds does not change variables correctly.",
+    "transfer": "Choose a slice direction for a changed region and justify the boundaries and variable."
+  },
+  "u5-properties-of-riemann-integrals": {
+    "motivation": "Which accumulation properties follow naturally from adding signed contributions?",
+    "reasoning": ["Derive linearity from the sums and identify the required integrability assumptions.", "Explain interval splitting, zero-length intervals and reversed-bound orientation.", "Use positivity/comparison where their actual hypotheses hold and keep signed accumulation distinct from magnitude."],
+    "workedExample": "Combine given integral values across split and reversed intervals.",
+    "contrast": "Definite integrals do not generally multiply or divide as their integrands do.",
+    "transfer": "Audit a proposed integral identity and justify the valid decomposition or bound."
+  },
+  "u5-fundamental-theorem-of-calculus-part-1": {
+    "motivation": "Why does the accumulated amount's local rate recover the original rate function?",
+    "reasoning": ["Resolve Armstrong's Part 1/2 naming from actual notes; if unavailable, label the supplemental convention and name the theorem direction explicitly.", "Form a difference quotient of an accumulation function as a short-interval average of the integrand.", "Use continuity to justify the limiting local rate, then track a varying upper bound through the chain rule."],
+    "workedExample": "Differentiate a fixed-base accumulation function and then a composed upper-bound example, keeping bounds visible.",
+    "contrast": "An integral's value and its derivative are distinct; replacing a composed upper bound without its derivative loses a factor.",
+    "transfer": "Explain a derivative-of-accumulation claim from graph data, including the continuity or chain condition needed."
+  },
+  "u5-fundamental-theorem-of-calculus-part-2": {
+    "motivation": "How can endpoint information replace the labor of taking a Riemann-sum limit?",
+    "reasoning": ["Resolve source Part 1/2 convention before assigning the label; name this direction as antiderivative endpoint evaluation.", "Connect accumulation and antiderivatives under the theorem's interval assumptions.", "Justify subtracting endpoint antiderivative values, cancellation of the constant, and orientation of the bounds."],
+    "workedExample": "Evaluate a definite integral via an antiderivative and compare with a geometric check when available.",
+    "contrast": "Integrating across an undefined integrand or subtracting in the wrong order invalidates a routine-looking setup.",
+    "transfer": "Verify the chosen antiderivative and defend the endpoint evaluation for a changed integrand/domain."
+  },
+  "u5-corollaries-of-the-fundamental-theorem-of-calculus": {
+    "motivation": "How do FTC and existing derivative rules handle more elaborate accumulation expressions?",
+    "reasoning": ["Identify the relevant FTC direction and its assumptions rather than memorizing a new isolated formula.", "Split or reverse integral bounds to separate two moving endpoints when necessary.", "Apply the chain rule to each varying endpoint and connect the signs to interval orientation."],
+    "workedExample": "Differentiate an integral with two varying bounds, showing the decomposition before the final expression.",
+    "contrast": "Forgetting the lower-bound contribution or its sign gives a wrong rate of change.",
+    "transfer": "Interpret and differentiate a transformed accumulation expression with shifted/scaled limits."
+  },
+  "u5-power-rule-for-antiderivatives": {
+    "motivation": "Which family of functions differentiates to a given power, and why is one exponent exceptional?",
+    "reasoning": ["Reverse the established derivative power rule with the correct coefficient.", "Explain the arbitrary constant on an appropriate interval and verify the candidate by differentiation.", "Identify exponent -1 as the exception and retain real-domain restrictions for noninteger powers."],
+    "workedExample": "Integrate a rewritten root/reciprocal polynomial combination and differentiate the result.",
+    "contrast": "Omitting +C or applying the same division when the new exponent is zero fails.",
+    "transfer": "Diagnose a proposed antiderivative's coefficient, exponent or domain error through differentiation."
+  },
+  "u5-deriving-ln-x": {
+    "motivation": "What function naturally accumulates the reciprocal rate that the power rule cannot reverse?",
+    "reasoning": ["Inspect whether the source uses an integral definition of ln or its inverse-exponential characterization; distinguish the chosen starting fact.", "Connect the reciprocal derivative to ln on the positive domain using that justified route.", "Explain the extension to ln|x| for reciprocal antiderivatives on intervals not containing zero, without suggesting a continuous integral through zero."],
+    "workedExample": "Relate a reciprocal integral on a positive interval to the logarithmic function and verify its derivative.",
+    "contrast": "The real function ln(x) is not defined for negative x, and an interval crossing zero is not covered by ordinary FTC evaluation.",
+    "transfer": "Explain which logarithmic antiderivative/domain statement is justified for a changed reciprocal expression."
+  },
+  "u5-antiderivatives-of-exponential-and-logarithmic-functions": {
+    "motivation": "How do known exponential/logarithmic derivative constants determine reverse-rate formulas?",
+    "reasoning": ["Start from a verified derivative identity and solve for the coefficient needed in an antiderivative.", "Keep base-dependent factors and constant inner slopes where relevant.", "Check by differentiation and respect logarithmic domains; do not infer that every function named logarithmic has an elementary in-scope integration method."],
+    "workedExample": "Integrate a base-a exponential and a reciprocal/log-derivative form, then verify each.",
+    "contrast": "A formula for integrating 1/x does not mean integrating ln(x) uses the same formula or is already in scope.",
+    "transfer": "Choose a justified reverse-derivative pattern for a changed base or inner scaling and identify a missing substitution."
+  },
+  "u5-antiderivatives-of-sinee-and-cosine": {
+    "motivation": "How can the sine/cosine derivative cycle reconstruct their antiderivatives with correct signs?",
+    "reasoning": ["Reverse the verified sine/cosine derivatives rather than guessing signs.", "Account for constant angle scaling and the antiderivative constant.", "Differentiate to check both the sign and inner coefficient, using radians."],
+    "workedExample": "Integrate a linear combination of scaled sine/cosine terms and verify the result.",
+    "contrast": "Confusing the derivative cycle with its reverse produces a sign or scale error.",
+    "transfer": "Reconstruct a trig antiderivative from derivative identities and explain each coefficient."
+  },
+  "u5-antiderivatives-involving-inverse-trigonometric-functions": {
+    "motivation": "Which algebraic integrands are recognizable as derivatives of inverse trig functions?",
+    "reasoning": ["Write the actual inverse-trig derivative pattern with its domain.", "Normalize the integrand's scaling or complete the relevant simple square when within class scope.", "Match all coefficients and verify the resulting antiderivative by differentiation."],
+    "workedExample": "A scaled arctangent pattern followed by an arcsine-type pattern with domain restrictions.",
+    "contrast": "A denominator that merely looks similar can have a different scale, sign or required method.",
+    "transfer": "Explain why a changed integrand matches or fails to match a particular inverse-trig derivative."
+  },
+  "u5-integrals-with-piecewise-functions-and-absolute-value": {
+    "motivation": "When does one interval contain several different accumulation formulas?",
+    "reasoning": ["Find branch changes and sign changes affecting the integrand.", "Split the bounds at every relevant change and write the correct formula on each piece.", "Combine signed contributions and distinguish integrating f from integrating |f|, using geometry or antiderivatives where justified."],
+    "workedExample": "A piecewise or absolute-value definite integral with one or more internal split points.",
+    "contrast": "Taking the absolute value of the final signed integral does not generally produce total area.",
+    "transfer": "Set up a changed piecewise integral and explain why each split and sign is needed."
+  },
+  "u5-u-substitution-for-indefinite-integrals": {
+    "motivation": "Can reversing a composition derivative turn a complicated integral into a familiar one?",
+    "reasoning": ["Identify a useful inner function and connect its derivative factor to the chain rule.", "Rewrite the entire integrand and differential consistently in the new variable, adjusting constant factors.", "Integrate, return to the original variable, retain +C and check the result by differentiation."],
+    "workedExample": "A reverse-chain-rule integral followed by one with a nonmatching constant factor.",
+    "contrast": "Leaving an unexplained original-variable factor in a new-variable integrand is an incomplete transformation.",
+    "transfer": "Defend a substitution choice or show why a tempting choice does not simplify a changed integral."
+  },
+  "u5-u-substitution-for-definite-integrals": {
+    "motivation": "How should the interval change when the integration variable changes?",
+    "reasoning": ["Use the reverse-chain-rule structure and transform the differential/integrand consistently.", "Convert both endpoints to the new variable, tracking reversed orientation where it occurs.", "Evaluate entirely in the new variable, or return the antiderivative to the old variable before using old bounds; explain why those routes agree under the applicable substitution conditions."],
+    "workedExample": "A definite composite integral with changed bounds and a check using the original-variable antiderivative.",
+    "contrast": "Using old x-bounds directly on a u-antiderivative mixes two different inputs.",
+    "transfer": "Diagnose an endpoint or orientation error in a new substitution and justify the corrected evaluation."
+  },
+  "u5-more-trigonometric-antiderivatives": {
+    "motivation": "How can identities and known derivative patterns expose a hidden trig antiderivative?",
+    "reasoning": ["Inspect whether algebra, a reciprocal identity or a simple substitution matches an established pattern.", "Transform only through identities valid on the current domain and track signs/scale factors.", "Verify the final antiderivative by differentiation and keep methods within Armstrong's assigned scope."],
+    "workedExample": "A nonobvious trig expression rewritten into a known reciprocal-trig derivative or simple substitution.",
+    "contrast": "A remembered reciprocal-trig formula applied to a similar-looking but different integrand is not justified.",
+    "transfer": "Explain the identity or substitution that makes a changed trig integral tractable without importing later integration techniques."
+  },
+  "u5-integrals-of-rational-functions": {
+    "motivation": "Which algebraic feature makes a rational integrand resemble a known antiderivative?",
+    "reasoning": ["Inspect degree, common factors and the real domain before choosing a method.", "Use appropriate algebra, numerator adjustment or a permitted substitution to expose power, logarithmic or inverse-trig patterns.", "Check all constant factors and interval restrictions by differentiation; do not assume partial fractions or other later methods are assigned."],
+    "workedExample": "Compare a numerator proportional to a denominator derivative with an inverse-trig denominator pattern.",
+    "contrast": "Every rational function does not fit the same log template; poles also obstruct routine definite evaluation across an interval.",
+    "transfer": "Choose and justify the simplest in-scope method for a new rational integrand and identify any unsupported extension."
+  },
+  "u6-average-value-of-a-function": {
+    "motivation": "What constant function would accumulate the same signed amount over an interval?",
+    "reasoning": ["Equate a constant height times interval length with the function's integral.", "Derive the average-value expression and distinguish it from the average rate of change.", "Check interval length and units; use continuity only when making an additional existence claim about attaining the average."],
+    "workedExample": "Find average value from a formula or a signed-area graph and interpret the constant-height comparison.",
+    "contrast": "Endpoint averaging and average slope are not generally the average value of a nonlinear function.",
+    "transfer": "Explain which proposed average is justified by a new graph/table and what assumptions an attainment claim needs."
+  },
+  "u6-accumulation-model-of-ftc": {
+    "motivation": "How can an integral turn a supplied rate into a new function whose behavior we analyze?",
+    "reasoning": ["Define a fixed-base accumulation function and interpret its value at the base point.", "Use FTC to relate its derivative to the integrand under the required conditions.", "Use integrand signs and changes to analyze accumulation extrema/concavity while separately finding heights from signed areas."],
+    "workedExample": "Analyze an accumulation function from a graph of its integrand, finding both values and behavior.",
+    "contrast": "The integrand graph is a derivative graph of accumulation, not the accumulation graph itself.",
+    "transfer": "Explain how changing the base or adding an initial constant affects heights versus derivative-based behavior."
+  },
+  "u6-initial-value-problems": {
+    "motivation": "Why does a known starting value pick one function from an antiderivative family?",
+    "reasoning": ["Find the family satisfying the given derivative relation on an appropriate interval.", "Apply the initial condition to determine the constant rather than assuming the integral starts at zero.", "Verify both the derivative equation and the initial value, or write an equivalent initial-value accumulation model."],
+    "workedExample": "Recover a function from its derivative and one value using both constant-solving and a definite-integral setup.",
+    "contrast": "A correct derivative with the wrong constant satisfies the rate relation but fails the initial condition.",
+    "transfer": "Translate graph/table derivative information and an initial value into a justified function value at another input."
+  },
+  "u6-area-between-curves": {
+    "motivation": "Why is the area of a region built from the distance between its boundaries?",
+    "reasoning": ["Find intersection points and choose a useful slice direction.", "Derive top-minus-bottom or right-minus-left slice height and split where boundary order changes.", "Integrate the nonnegative slice areas with correct bounds and check the geometry."],
+    "workedExample": "A two-curve region with an intersection that changes which curve is above.",
+    "contrast": "Subtracting entire integrals in a fixed order can create cancellation rather than total region area.",
+    "transfer": "Choose and justify a dx or dy setup for a new region, including any required interval splits."
+  },
+  "u6-volumes-of-revolution-with-disks": {
+    "motivation": "What cross-sectional area does rotating a filled slice produce?",
+    "reasoning": ["Describe the region and rotation axis before choosing the slice direction.", "Measure the radius as a nonnegative distance to the axis and derive the circular cross-section area.", "Integrate that area over the correct variable/bounds and check whether the region actually reaches the axis."],
+    "workedExample": "A disk volume about a coordinate axis, then the same principle about a shifted axis.",
+    "contrast": "The radius is not automatically the function height when the axis shifts, and a gap to the axis calls for a hole.",
+    "transfer": "Defend a disk setup for a changed region/axis and identify when the method instead requires washers."
+  },
+  "u6-volumes-of-revolution-with-washers": {
+    "motivation": "How do rotating slices change when the solid has an inner hole?",
+    "reasoning": ["Determine outer and inner radii from distances to the actual rotation axis.", "Derive annular cross-sectional area by subtracting circular areas, not by squaring a radius difference.", "Choose bounds/variable and split intervals if radius order or the region's relation to the axis changes."],
+    "workedExample": "A shifted-axis washer problem with both radii derived from a labeled slice.",
+    "contrast": "The square of outer-minus-inner radius is not the outer circle area minus the inner circle area.",
+    "transfer": "Explain and repair a reversed-radius or missing-hole setup for a new region."
+  },
+  "u6-volumes-of-solids-with-cross-sections": {
+    "motivation": "How can a known cross-sectional shape determine the volume of a solid we cannot easily visualize?",
+    "reasoning": ["Determine the slice length from the base region at a variable position.", "Use the specified shape and what that length represents to derive area, including geometric scale factors.", "Integrate areas over the base interval and check the resulting cubic units."],
+    "workedExample": "Compare square and triangular cross sections on the same base region, deriving each area formula.",
+    "contrast": "A triangle's altitude, side and hypotenuse are not interchangeable measurements.",
+    "transfer": "Set up a volume for a changed cross-sectional shape and justify its area coefficient from geometry."
+  },
+  "u6-position-velocity-acceleration-and-ivps": {
+    "motivation": "What additional starting data is needed to reconstruct motion from rates?",
+    "reasoning": ["Connect velocity/acceleration derivatives to their position/rate antiderivatives with units.", "Apply the separate initial conditions required at each integration stage.", "Verify the reconstructed motion against the rate relations and every supplied initial value."],
+    "workedExample": "Recover velocity and position from acceleration with both initial velocity and initial position.",
+    "contrast": "Integrating acceleration twice needs two constants; one starting value does not determine both.",
+    "transfer": "Use a rate graph plus initial data to determine a motion quantity and explain what remains undetermined."
+  },
+  "u6-displacement-and-distance": {
+    "motivation": "Why can returning to the starting point still involve substantial travel?",
+    "reasoning": ["Interpret signed velocity accumulation as displacement.", "Interpret speed accumulation as distance and locate all velocity sign changes inside the interval.", "Split or use absolute velocity consistently, preserving initial position only when a position value is requested."],
+    "workedExample": "A particle reversing direction: calculate displacement, distance and final position separately.",
+    "contrast": "Absolute displacement can be much smaller than distance; taking an absolute value only at the end loses reversals.",
+    "transfer": "Explain these quantities from a new velocity graph/table and justify the intervals used."
+  },
+  "u6-average-value-of-a-function-in-context": {
+    "motivation": "What does a time-average measurement mean for the amount actually accumulated?",
+    "reasoning": ["Identify the function's quantity, units and averaging interval.", "Derive the equivalent constant-level model from the integral divided by interval length.", "Interpret the result in the original context and distinguish average rate from average level and endpoint averages."],
+    "workedExample": "Find average temperature or rate over a time interval using formula or table information.",
+    "contrast": "An average amount and an average rate have different units; an endpoint mean is not generally the time average.",
+    "transfer": "Write a correct contextual explanation of a changed average-value computation and evaluate an incorrect interpretation."
+  },
+  "u6-accumulation-model-of-ftc-in-context": {
+    "motivation": "How does an initial amount plus net rates describe a changing quantity over time?",
+    "reasoning": ["Define the amount, incoming/outgoing rates, units and initial condition.", "Build initial amount plus the integral of the net rate with consistent signs and time bounds.", "Analyze amounts and extrema from accumulation and rate sign changes, checking endpoints and physically feasible intervals."],
+    "workedExample": "An inflow/outflow model requiring both an amount calculation and a justified maximum.",
+    "contrast": "Integrating an inflow alone ignores outflow, and omitting the initial amount changes the modeled quantity.",
+    "transfer": "Construct and justify a changed inventory/population model from a rate graph or table."
+  },
+  "u6-ap-style-frqs-applications-of-integrals": {
+    "motivation": "How can several parts of a rate problem form one coherent mathematical explanation?",
+    "reasoning": ["Define quantities, rate relationships, domains and units before selecting formulas.", "Connect derivative signs, averages and accumulated changes to each part's actual request.", "Support every conclusion with an equation/setup and contextual sentence, independently checking calculation and assumptions."],
+    "workedExample": "A labeled supplemental multi-part table/graph rate problem with method choices explained before computations.",
+    "contrast": "A numerical answer or calculator output alone may fail to justify an extremum, model or units.",
+    "transfer": "Complete a fresh multi-part context with changed representation and explain why each selected method fits; do not claim an unavailable Armstrong exam rubric."
+  },
+  "u7-constructing-slope-fields-from-differential-equations": {
+    "motivation": "How can an equation describe solution directions before we know any solution formula?",
+    "reasoning": ["Interpret the derivative equation as a local slope assigned to each coordinate.", "Evaluate the right-hand side at requested points and draw short segments with correct slope signs and magnitudes.", "Use zero-slope loci and dependence on x/y to check the field's pattern without confusing segments with complete solutions."],
+    "workedExample": "Construct a small field for an equation depending on both coordinates, with zero and steep slopes checked.",
+    "contrast": "The point's y-coordinate is not its slope; a segment's orientation is not a new coordinate value.",
+    "transfer": "Predict equal-slope patterns and build a changed field from the equation's dependencies."
+  },
+  "u7-sketching-specific-solutions-on-slope-fields": {
+    "motivation": "How does one initial point select a path following a field's local directions?",
+    "reasoning": ["Locate the initial condition and relate each local tangent to the field segment.", "Trace a plausible continuous solution curve without treating segment ends as mandatory points.", "Check equilibria, slope changes and qualitative domain behavior; avoid asserting uniqueness without the needed conditions."],
+    "workedExample": "Sketch distinct initial-value curves on one field, including an equilibrium when present.",
+    "contrast": "Joining a grid of segment endpoints or crossing an equilibrium without justification can contradict the differential equation.",
+    "transfer": "Explain which proposed curve is compatible with the field and initial value, and where a sketch alone cannot give exact values."
+  },
+  "u7-determining-differential-equations-from-slope-fields": {
+    "motivation": "What clues in repeated slopes reveal how an equation depends on its coordinates?",
+    "reasoning": ["Compare slopes along horizontal and vertical rows to detect x-only, y-only or mixed dependence.", "Identify zero-slope patterns and compare signs/magnitudes at selected coordinates.", "Test candidate equations at discriminating points rather than matching a vague visual resemblance."],
+    "workedExample": "Choose among candidate equations using a zero-slope locus and two contrasting grid points.",
+    "contrast": "One matching segment does not determine an entire field, and a diagonal zero-slope pattern is not automatically x-only or y-only.",
+    "transfer": "Design a small set of slope checks that distinguishes new candidate equations efficiently."
+  },
+  "u7-verifying-solutions-to-differential-equations": {
+    "motivation": "What must a proposed function satisfy everywhere to count as a solution?",
+    "reasoning": ["State the candidate's differentiable domain and calculate the required derivative.", "Substitute the candidate and derivative into the original equation as functions on an interval.", "Check an initial condition separately and identify excluded points or constants that affect validity."],
+    "workedExample": "Verify a candidate family and then determine whether one member satisfies the supplied initial value.",
+    "contrast": "Matching one point or an initial value alone does not establish the differential identity.",
+    "transfer": "Find the first failed verification step in a changed candidate, including a domain obstruction."
+  },
+  "u7-separable-differential-equations": {
+    "motivation": "When can a rate relation be rearranged into two integrals involving separate variables?",
+    "reasoning": ["Identify separability and retain equilibrium solutions before dividing by a dependent-variable factor.", "Separate on appropriate domains, integrate with constants and solve explicitly only when justified.", "Use the initial condition, handle absolute-value/sign/domain restrictions and verify the result in the original equation."],
+    "workedExample": "A separable initial-value problem with an equilibrium possibility and a checked solution domain.",
+    "contrast": "Dividing by a factor can discard constant solutions; dropping log absolute values or choosing a wrong sign can violate the initial condition.",
+    "transfer": "Solve and justify a changed separable model, explicitly explaining retained solutions and the allowed interval."
+  },
+  "u7-super-basic-2nd-order-differential-equations": {
+    "motivation": "How can repeated antiderivatives reconstruct a function from a simple second-rate relation?",
+    "reasoning": ["Identify the simple class-appropriate form, such as a second derivative specified as a function of the input.", "Integrate to a first derivative and then a function, retaining independent constants at both stages.", "Use the required function/derivative initial data and verify the second-order relation; keep advanced ODE methods outside this lesson."],
+    "workedExample": "A simple acceleration-type second derivative with separate initial position and slope data.",
+    "contrast": "One constant or one initial condition does not generally determine a second-order solution.",
+    "transfer": "Explain which initial datum determines which constant and what remains free if data are missing."
+  },
+  "u7-basic-word-problems": {
+    "motivation": "How does a phrase about change become a differential equation rather than a formula guess?",
+    "reasoning": ["Define the changing quantity, independent variable and units.", "Translate proportionality or a supplied rate into the equation and attach the initial condition.", "Solve only with an applicable in-scope method, verify the solution and interpret its parameters."],
+    "workedExample": "A simple proportional-growth or specified-rate context with the model derived from the wording.",
+    "contrast": "Proportional to the amount, proportional to its difference from equilibrium and constant rate describe different equations.",
+    "transfer": "Write and justify a model for changed wording before solving it, including units and starting data."
+  },
+  "u7-differential-equations-in-the-real-world": {
+    "motivation": "What does a solved rate model explain, and where can its assumptions stop being reasonable?",
+    "reasoning": ["State the contextual assumptions, rate law, initial data and physically meaningful domain.", "Choose the verified solution method and interpret equilibrium/long-run behavior within that model.", "Check the differential equation and initial value, then distinguish mathematical predictions from guaranteed real-world accuracy."],
+    "workedExample": "A separable growth/decay or approach-to-equilibrium model with parameter and domain interpretation.",
+    "contrast": "An algebraically valid function can give an impossible amount outside the model's useful interval.",
+    "transfer": "Change an assumption or initial value, explain how the equation/solution changes, and identify a model limitation."
+  },
+  "u7-ap-style-frqs-differential-equations": {
+    "motivation": "How do fields, derivative reasoning and an initial-value solution support one multi-part response?",
+    "reasoning": ["Interpret the equation and initial point in the field/context and justify qualitative behavior.", "Verify separability or the required method and retain every valid solution branch/equilibrium.", "Show the integration, initial-condition use and original-equation/domain check before giving a contextual conclusion."],
+    "workedExample": "A supplemental multi-part field/separation/interpretation problem with each dependency made explicit.",
+    "contrast": "A correct-looking solution formula does not justify a field sketch, lost equilibrium or invalid domain.",
+    "transfer": "Handle a fresh equation and representation with complete reasoning; treat actual Armstrong rubric details as unverified until supplied."
+  },
+  "u1-continuity-theorems": {
+    "motivation": "When can known continuity facts replace a fresh limit calculation for every expression?",
+    "reasoning": ["Identify the established continuous building blocks and their domains.", "Apply closure and composition results with explicit hypotheses, including nonzero denominators.", "Distinguish continuity conclusions from IVT or derivative guarantees and honor the schedule/notes numbering conflict."],
+    "workedExample": "Justify continuity of a composite/rational expression on its actual domain, then inspect an exceptional input separately.",
+    "contrast": "Combining continuous functions through a denominator zero does not establish continuity there.",
+    "transfer": "Audit a continuity-by-theorem claim, name the first missing hypothesis and give the corrected interval/domain."
+  },
+  "u6-analytic-applications-of-integrals": {
+    "motivation": "Which integral application is actually requested by a general chapter heading?",
+    "reasoning": ["Resolve the concrete subgoal from the class assignment or learner request rather than assuming this scheduled heading proves every sublesson was taught.", "Choose the relevant average-value, accumulation or initial-value model and derive it from its definition/FTC connection.", "Interpret units, initial constants and hypotheses, then verify the selected subgoal before moving to another."],
+    "workedExample": "Use one clearly stated subproblem to distinguish average value, net accumulation and reconstruction with an initial condition.",
+    "contrast": "Dividing by interval length, adding an initial amount and differentiating accumulation answer different questions.",
+    "transfer": "Classify a changed analytic application, justify the method and explain which other chapter facts are unnecessary."
+  },
+  "u2-derivative-theorems": {
+    "motivation": "Why must a smooth trip sometimes attain its average rate at an instant?",
+    "reasoning": ["Compare a secant slope with tangent slopes and motivate Rolle's special case geometrically.", "State the closed-interval continuity and open-interval differentiability requirements for the relevant theorem.", "Solve for possible guaranteed inputs while separating theorem guarantees from statements possible without its hypotheses."],
+    "workedExample": "Check MVT hypotheses, calculate the average slope and locate all eligible matching tangent slopes.",
+    "contrast": "A corner or interval discontinuity can remove the guarantee, even if a particular example still has a matching slope.",
+    "transfer": "Choose justified conclusions from a formula or graph and explain why endpoint/open-interval distinctions matter."
+  }
+}

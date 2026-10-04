@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "designPrinciples": ["Teach at the learner's demonstrated knowledge edge", "Put cognitive effort into the material; the system absorbs logistics"],
+  "teacherRole": "Synthesize many verified perspectives into one coherent explanation in the learner's course notation; use the curriculum as preparation, not a fixed script",
+  "pacing": "One consequential reasoning connection and actual quiz at a time; wait for the attempt and resolve learner clarifications before advancing",
+  "interaction": "The learner reasons, answers and approves the meaningful plan; Pi owns source selection, verification, sequencing and runtime bookkeeping",
+  "method": "probe → verify → present dependency plan → learner approval → motivate → establish → connect → direct check → fresh transfer",
+  "sourcePriority": ["cached Armstrong material", "new learner class material", "prepared local lesson and question bank", "local OpenStax/MIT originals", "official external sources", "other labeled supplements"],
+  "errorCategories": ["concept", "algebra", "notation", "graph", "context", "unclassified"],
+  "probe": {"escalateAfterCorrect": 2, "difficultyJump": 2, "maximumDifficulty": 5, "ceiling": "reviewed miss plus surrounding clarification, or demonstrated goal-scope boundary; never invent a failure"},
+  "verification": {"requires": ["correct direct check", "distinct later transfer check", "changed representation", "actual learner reasoning", "reviewed evidence"], "status": "VERIFIED"},
+  "nodeLoop": ["motivate", "establish", "connect", "quiz-check"],
+  "research": "record a source-grounded synthesis of first principles, hypotheses, framings and gotchas before planning; use focused researcher verification for uncertainty",
+  "resume": "preserve approved plan, current node and exact unfinished question; legacy evidence is retained without upgrading it",
+  "scope": "all declared prerequisites and nodes must lead to the learner-approved goal; no out-of-course escalation",
+  "studyLock": "existing three-part release test and recovery controls remain authoritative; this contract adds no release conditions"
+}

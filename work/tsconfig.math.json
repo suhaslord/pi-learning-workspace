@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "baseUrl": "..",
+    "paths": {
+      "@mariozechner/pi-tui": [
+        "work/runtime/pi/node_modules/@earendil-works/pi-tui/dist/index.d.ts"
+      ],
+      "@mariozechner/pi-coding-agent": [
+        "work/runtime/pi/node_modules/@earendil-works/pi-coding-agent/dist/index.d.ts"
+      ],
+      "@sinclair/typebox": [
+        ".pi/extensions/visual-tools/node_modules/@sinclair/typebox/build/cjs/index.d.ts"
+      ]
+    },
+    "typeRoots": [
+      "../.pi/extensions/visual-tools/node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "../.pi/extensions/terminal-math.ts",
+    "../.pi/extensions/lib/terminal-math.ts",
+    "../.pi/extensions/lib/learning-vault.ts",
+    "../.pi/extensions/learning-workflow.ts",
+    "../.pi/extensions/class-materials.ts",
+    "../.pi/extensions/md-log.ts",
+    "../.pi/extensions/armstrong-online.ts",
+    "../.pi/extensions/lib/armstrong-online.ts",
+    "../.pi/extensions/quiz.ts",
+    "../.pi/extensions/voice.ts",
+    "../.pi/extensions/study-lock.ts"
+  ]
+}

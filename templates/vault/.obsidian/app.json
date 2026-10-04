@@ -1,0 +1,11 @@
+{
+  "defaultViewMode": "preview",
+  "livePreview": true,
+  "readableLineLength": true,
+  "attachmentFolderPath": "viz",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "Notes",
+  "alwaysUpdateLinks": true,
+  "showLineNumber": false,
+  "spellcheck": true
+}

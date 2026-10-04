@@ -1,0 +1,298 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import os from 'node:os';
+import { loadExtensions } from './runtime/pi/node_modules/@earendil-works/pi-coding-agent/dist/core/extensions/loader.js';
+
+// Submitted-attempt fixtures exercise runtime guards without involving a real learner.
+const root = process.cwd();
+const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'teaching-runtime-'));
+const vault = path.join(scratch, 'vault');
+let entries = [], serial = 0, sessionId = 'runtime-fixture';
+const sent = [], shown = [], notices = [];
+const entry = message => { const value = { type: 'message', id: `entry-${++serial}`, parentId: entries.at(-1)?.id ?? null, message }; entries.push(value); return value.id; };
+const call = (id, name, args) => entry({ role: 'assistant', content: [{ type: 'toolCall', id, name, arguments: args }] });
+const result = (id, name, details, text = 'Fixture result', isError = false) => entry({ role: 'toolResult', toolCallId: id, toolName: name, details, content: [{ type: 'text', text }], isError });
+const ctx = { cwd: scratch, isIdle: () => true, sessionManager: {
+  getBranch: () => entries, getEntries: () => entries, getSessionId: () => sessionId,
+  getHeader: () => ({ timestamp: '2026-10-03T12:00:00Z' }), getSessionName: () => 'Runtime regression fixtures',
+}, ui: { notify: (text, level) => notices.push({ text, level }), setStatus() {}, theme: { fg: (_color, text) => text } } };
+
+try {
+  fs.mkdirSync(path.join(scratch, '.pi'), { recursive: true });
+  fs.writeFileSync(path.join(scratch, '.pi/learning.json'), JSON.stringify({ vaultPath: 'vault', autoLog: true }));
+  fs.copyFileSync(path.join(root, '.pi/learning-runtime.json'), path.join(scratch, '.pi/learning-runtime.json'));
+  fs.mkdirSync(path.join(scratch, '.pi/course-context'));
+  fs.copyFileSync(path.join(root, '.pi/course-context/video-teaching-principles.md'), path.join(scratch, '.pi/course-context/video-teaching-principles.md'));
+  const loaded = await loadExtensions(['learning-workflow.ts', 'md-log.ts'].map(file => path.join(root, '.pi/extensions', file)), root);
+  assert.deepEqual(loaded.errors, []);
+  const extensions = loaded.extensions;
+  const tools = new Map(extensions.flatMap(extension => [...extension.tools]));
+  const commands = new Map(extensions.flatMap(extension => [...extension.commands]));
+  const emit = async (name, event) => {
+    const results = [];
+    for (const extension of extensions) for (const handler of extension.handlers.get(name) ?? []) results.push(await handler(event, ctx));
+    return results.find(value => value?.block) ?? results.find(value => value !== undefined);
+  };
+  loaded.runtime.appendEntry = (customType, data) => entries.push({ type: 'custom', customType, data, id: `entry-${++serial}`, parentId: entries.at(-1)?.id });
+  loaded.runtime.sendUserMessage = (content, options) => sent.push({ content, options });
+  loaded.runtime.sendMessage = message => { shown.push(message); entry({ role: 'custom', ...message }); };
+  const execute = async (name, params) => {
+    const id = `tool-${++serial}`;
+    call(id, name, params);
+    const response = await tools.get(name).definition.execute(id, params, undefined, undefined, ctx);
+    result(id, name, response.details, response.content.filter(part => part.type === 'text').map(part => part.text).join('\n'), response.isError);
+    return response.details;
+  };
+  const runtime = params => execute('learning_runtime', params);
+  const checkpoint = params => execute('learning_checkpoint', params);
+  const status = () => runtime({ action: 'status' });
+  const stage = question => runtime({ action: 'question', question });
+  const review = (quizId, reasoningSound = true, categories = []) => runtime({ action: 'review', quizId, reasoningSound, categories,
+    review: reasoningSound ? 'Fixture learner reasoning justifies the relevant step and its assumptions.' : 'Fixture reasoning contains an observed error requiring a surrounding probe.',
+    observed: reasoningSound ? 'Actual fixture Note supports this connection.' : 'Actual fixture Note contradicts the requested reasoning.' });
+  const submit = async (question, { correct = true, note = 'I justify the fixture conclusion by its definition and stated assumptions.', disposition = 'answered' } = {}) => {
+    const id = `quiz-${++serial}`;
+    const args = { question, answers: ['Fixture claim A', 'Fixture claim B'], correctAnswer: 0, explanation: 'PRIVATE_UNANSWERED_FIXTURE_KEY' };
+    call(id, 'quiz', args);
+    const guard = await emit('tool_call', { toolName: 'quiz', toolCallId: id, input: args });
+    assert.ok(!guard?.block, guard?.reason);
+    const details = { question, status: disposition, correct, note, dontKnow: false };
+    result(id, 'quiz', details);
+    await emit('tool_result', { toolName: 'quiz', toolCallId: id, details, isError: false });
+    return id;
+  };
+  const attempt = async (question, options = {}, categories = []) => { await stage(question); const id = await submit(question.question, options); await review(id, options.correct !== false, categories); return id; };
+  const probe = (strandId, difficulty, label, purpose = 'probe') => ({ question: `Fixture prerequisite ${label}: justify this claim.`, purpose, strandId, difficulty, representation: 'symbolic' });
+  const step = nodeId => ({ nodeId, motivate: `We need ${nodeId} to resolve this fixture goal.`, establish: `Establish ${nodeId} from its definition and hypotheses.`, connect: `Connect ${nodeId} to its confirmed fixture dependencies.` });
+  const present = async value => { const message = { role: 'assistant', content: [{ type: 'text', text: [value.motivate, value.establish, value.connect].join('\n\n') }] }; entry(message); await emit('message_end', { message }); };
+
+  await emit('session_start', {});
+  await commands.get('learn').handler('Fixture topic', ctx);
+  assert.equal(sent.at(-1).content, '/skill:teach Fixture topic');
+  assert.equal((await status()).phase, 'setup');
+  assert.equal((await emit('tool_call', { toolName: 'quiz', toolCallId: 'unstaged', input: { question: 'Unstaged fixture?' } })).block, true);
+  const strands = [{ id: 'algebra', label: 'Fixture algebra', scope: 'Goal-relevant fixture manipulation only', maxDifficulty: 5 },
+    { id: 'graph', label: 'Fixture graph', scope: 'Goal-relevant fixture graph interpretation only', maxDifficulty: 5 }];
+  await runtime({ action: 'begin', topic: 'Fixture topic', goal: 'Fixture connected goal', strands });
+  await assert.rejects(() => stage(probe('algebra', 1, 'before-inspection')), /Inspect/);
+  await assert.rejects(() => runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'not-read', path: 'source.md', kind: 'supplement', supports: 'Relevant source verification for fixture.' }] }), /real successful inspection/);
+  const sourceFile = path.join(scratch, 'source.md');
+  fs.writeFileSync(sourceFile, '# Source fixture\nDefinitions, assumptions and independent checks for the regression fixtures.\n');
+  call('source-read', 'read', { path: sourceFile }); result('source-read', 'read', {}, fs.readFileSync(sourceFile, 'utf8'));
+  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'source-read', path: sourceFile, kind: 'supplement', supports: 'Fixture definitions and stated assumptions are inspected.' }] });
+  await assert.rejects(() => runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'source-read', path: sourceFile, kind: 'armstrong', supports: 'This is actually a supplemental fixture, not Armstrong.' }] }), /Do not label/);
+  const plan = { goalNode: 'goal', nodes: [{ id: 'root', label: 'Fixture definition', dependsOn: [], status: 'current' }, { id: 'goal', label: 'Fixture connected goal', dependsOn: ['root'], status: 'pending' }] };
+  const planning = { action: 'plan', plan, approach: 'Build from the checked fixture definition toward the connected fixture goal.', nodeStrands: [{ nodeId: 'root', strandIds: ['algebra'] }, { nodeId: 'goal', strandIds: ['graph'] }] };
+  await assert.rejects(() => runtime(planning), /research\/verification/);
+  await assert.rejects(() => runtime({ action: 'research', research: { summary: 'A long enough research assertion without any real source inspection evidence.', sourceToolCallIds: ['invented'] } }), /real registered/);
+  await runtime({ action: 'research', research: { summary: 'Inspected fixture definitions, hypotheses, motivated framing and likely confusions; no quiz key disclosed.', sourceToolCallIds: ['source-read'] } });
+  await assert.rejects(() => runtime(planning), /Every relevant prerequisite/);
+  await attempt(probe('algebra', 1, 'floor'));
+  await attempt(probe('algebra', 4, 'miss'), { correct: false }, ['algebra']);
+  await assert.rejects(() => stage(probe('algebra', 4, 'skip-clarification')), /Probe around/);
+  await assert.rejects(() => stage(probe('algebra', 5, 'harder-clarification', 'clarify')), /same\/easier/);
+  await attempt(probe('algebra', 2, 'surrounding', 'clarify'));
+  await attempt(probe('graph', 1, 'floor-one'));
+  await attempt(probe('graph', 1, 'floor-two'));
+  await assert.rejects(() => stage(probe('graph', 2, 'timid-escalation')), /sharper/);
+  await assert.rejects(() => stage(probe('graph', 6, 'out-of-scope')), /scope ceiling/);
+  await attempt(probe('graph', 5, 'scope-ceiling'));
+  await runtime({ action: 'scope_boundary', strandId: 'graph', reason: 'Highest goal-relevant fixture level is demonstrated; further topics would exceed the agreed course scope.' });
+  await assert.rejects(() => runtime({ ...planning, nodeStrands: [{ nodeId: 'root', strandIds: ['algebra'] }, { nodeId: 'goal', strandIds: [] }] }), /Map every declared strand/);
+  await assert.rejects(() => runtime({ ...planning, plan: { ...plan, nodes: [...plan.nodes, { id: 'unrelated', label: 'Unrelated fixture', dependsOn: [], status: 'pending' }] } }), /remove unrelated branches/);
+  const proposed = await runtime(planning);
+  assert.equal(proposed.phase, 'approval');
+  assert.ok(shown.at(-1).content.includes('root --> goal') && shown.at(-1).display);
+  await emit('message_end', { message: entries.findLast(item => item.message?.role === 'custom' && item.message.customType === 'learning-plan').message });
+  const transcript = path.join(vault, 'Sessions/2026-10-03-runtime-fixture.md');
+  assert.ok(fs.readFileSync(transcript, 'utf8').includes('root --> goal'), 'Displayed plan is mirrored to Obsidian');
+  await emit('session_start', {});
+  assert.equal(fs.readFileSync(transcript, 'utf8').split('root --> goal').length, 2, 'Plan backfill does not duplicate');
+  await assert.rejects(() => stage({ question: 'Fixture premature direct question?', purpose: 'direct', nodeId: 'root', difficulty: 1, representation: 'symbolic' }), /wait for plan approval/);
+  await assert.rejects(() => runtime({ action: 'approve', approvalId: 'invented-approval' }), /real affirmative/);
+  call('declined', 'ask_user_question', {}); result('declined', 'ask_user_question', { status: 'answered', answers: [{ value: 'change-plan' }] });
+  await assert.rejects(() => runtime({ action: 'approve', approvalId: 'declined' }), /real affirmative/);
+  call('approved', 'ask_user_question', { question: 'Use this plan?', options: [{ label: 'Approve', value: proposed.approvalValue }] });
+  result('approved', 'ask_user_question', { status: 'answered', answers: [{ value: proposed.approvalValue }] });
+  await runtime({ action: 'approve', approvalId: 'approved' });
+  const resume = await runtime({ action: 'begin', topic: 'Fixture topic', goal: 'Fixture connected goal', strands });
+  assert.equal(resume.approvalId, 'approved', 'Same approved path does not restart diagnostics');
+  await assert.rejects(() => runtime({ action: 'step', step: step('goal') }), /Verify the dependency/);
+  await assert.rejects(() => runtime({ action: 'step', step: step('outside') }), /outside the approved/);
+  const rootStep = step('root');
+  await runtime({ action: 'step', step: rootStep });
+  const direct = { question: 'Fixture direct definition check: justify the requested connection.', purpose: 'direct', nodeId: 'root', difficulty: 2, representation: 'symbolic', sourceQuestionId: 'fixture-direct' };
+  await stage(direct);
+  assert.equal((await emit('tool_call', { toolName: 'quiz', toolCallId: 'before-prose', input: { question: direct.question } })).block, true);
+  await present(rootStep);
+  const directId = await submit(direct.question);
+  await assert.rejects(() => review('fabricated-quiz'), /actual pending quiz/);
+  await review(directId);
+  assert.equal((await status()).nodeVerification[0].status, 'UNVERIFIED');
+  await assert.rejects(() => runtime({ action: 'step', step: step('goal') }), /Verify the dependency/);
+  await assert.rejects(() => stage({ ...direct, question: 'Fixture new coefficients but same representation.', purpose: 'transfer', representation: ' SYMBOLIC ' }), /changed-representation/);
+  await assert.rejects(() => stage({ ...direct, question: 'Fixture changed graph prompt but a seen source ID.', purpose: 'transfer', representation: 'graph' }), /seen question/);
+  const transfer = { question: 'Fixture transfer from a new table: justify the same definition.', purpose: 'transfer', nodeId: 'root', difficulty: 3, representation: 'table', sourceQuestionId: 'fixture-new-transfer' };
+  await stage(transfer);
+  await submit(transfer.question, { disposition: 'cancelled' });
+  assert.equal((await status()).phase, 'paused');
+  assert.equal((await status()).pending.question, transfer.question);
+  assert.ok(!JSON.stringify(await status()).includes('PRIVATE_UNANSWERED_FIXTURE_KEY'));
+  await assert.rejects(() => stage({ ...transfer, question: 'Replace the cancelled question with a new fixture.' }), /unfinished question/);
+  await commands.get('learn').handler('', ctx);
+  await emit('before_agent_start', { prompt: 'Continue my saved lesson', systemPrompt: 'existing' });
+  assert.equal((await status()).phase, 'teach');
+  const transferId = await submit(transfer.question);
+  await review(transferId);
+  assert.equal((await status()).nodeVerification[0].status, 'VERIFIED');
+  const claim = 'Fixture definition is justified and transferred.';
+  const evidence = [directId, transferId].map(quizId => ({ quizId, understanding: claim, reasoningSound: true, review: 'The actual fixture reasoning justifies the definition and its application.' }));
+  const progressed = { ...plan, nodes: [{ ...plan.nodes[0], status: 'confirmed', quizId: transferId }, { ...plan.nodes[1], status: 'current' }] };
+  const checkpointInput = { topic: 'Fixture topic', goal: 'Fixture connected goal', understood: [claim], needsPractice: ['Fixture graph interpretation needs a further check.'], nextStep: 'Continue the actual fixture goal node.', sources: ['Inspected local fixture source, not Armstrong'], evidence, lessonPlan: progressed };
+  await assert.rejects(() => checkpoint({ ...checkpointInput, evidence: evidence.slice(0, 1) }), /both reviewed direct/);
+  await checkpoint(checkpointInput);
+  assert.equal((await status()).plan.nodes[1].status, 'current', 'Runtime current node follows validated saved map');
+  const saved = Object.values(JSON.parse(fs.readFileSync(path.join(vault, '.learning/progress.json'), 'utf8')))[0];
+  assert.deepEqual(saved.runtime.reviews.find(item => item.correct === false).categories, ['algebra']);
+  assert.ok(saved.runtime.research.sourceToolCallIds.includes('source-read'));
+
+  const branchBeforeRewind = [...entries];
+  entries = entries.filter(item => item.message?.toolCallId !== transferId);
+  assert.equal((await status()).nodeVerification[0].status, 'UNVERIFIED', 'Discarded-branch transfer evidence cannot verify a node');
+  await assert.rejects(() => runtime({ action: 'step', step: step('goal') }), /Verify the dependency/);
+  entries = [...branchBeforeRewind];
+  entries = entries.filter(item => item.message?.toolCallId !== 'approved');
+  await assert.rejects(() => runtime({ action: 'step', step: step('goal') }), /approval is not on/);
+  entries = [...branchBeforeRewind];
+  await attempt({ question: 'Fixture delayed retrieval reveals a conceptual graph error.', purpose: 'review', nodeId: 'root', difficulty: 1, representation: 'graph' }, { correct: false }, ['concept', 'graph']);
+  assert.equal((await status()).nodeVerification[0].status, 'UNVERIFIED', 'Contradictory later reasoning invalidates the current pair');
+  const { lessonPlan: _oldPlan, ...withoutPlan } = checkpointInput;
+  await assert.rejects(() => checkpoint({ ...withoutPlan, evidence: [] }), /new observed relapse/);
+  const demoted = { ...plan, nodes: [{ ...plan.nodes[0], status: 'current' }, { ...plan.nodes[1], status: 'pending' }] };
+  await checkpoint({ ...checkpointInput, evidence: [], lessonPlan: demoted, needsPractice: ['Fixture conceptual graph connection needs repair.'] });
+  assert.ok(Object.values(JSON.parse(fs.readFileSync(path.join(vault, '.learning/progress.json'), 'utf8')))[0].understood.includes(claim), 'Historical claim is preserved while current map records the relapse');
+  await runtime({ action: 'step', step: step('root') });
+  await present(step('root'));
+  await attempt({ question: 'Fixture repair contrasts the observed conceptual graph misconception.', purpose: 'repair', nodeId: 'root', difficulty: 1, representation: 'graph' });
+  const newDirect = await attempt({ question: 'Fixture new direct check after the conceptual repair.', purpose: 'direct', nodeId: 'root', difficulty: 2, representation: 'symbolic' });
+  const newTransfer = await attempt({ question: 'Fixture new contextual transfer after conceptual repair.', purpose: 'transfer', nodeId: 'root', difficulty: 3, representation: 'context' });
+  const refreshedEvidence = [newDirect, newTransfer].map(quizId => ({ ...evidence[0], quizId }));
+  await checkpoint({ ...checkpointInput, evidence: refreshedEvidence, lessonPlan: { ...progressed, nodes: [{ ...progressed.nodes[0], quizId: newTransfer }, progressed.nodes[1]] } });
+  assert.equal((await status()).nodeVerification[0].status, 'VERIFIED');
+  await runtime({ action: 'step', step: step('goal') });
+  await present(step('goal'));
+  await attempt({ question: 'Fixture goal has a context and notation error: justify your interpretation.', purpose: 'direct', nodeId: 'goal', difficulty: 3, representation: 'context' }, { correct: false }, ['context', 'notation']);
+  await assert.rejects(() => stage({ question: 'Fixture harder goal without repairing the miss.', purpose: 'direct', nodeId: 'goal', difficulty: 4, representation: 'graph' }), /Repair the specific/);
+  await attempt({ question: 'Fixture easier repair of the observed context and notation error.', purpose: 'repair', nodeId: 'goal', difficulty: 2, representation: 'context' });
+  await assert.rejects(() => stage({ question: 'Fixture transfer without a post-repair direct check.', purpose: 'transfer', nodeId: 'goal', difficulty: 2, representation: 'graph' }), /sound direct/);
+  const pending = { question: 'Fixture exact unfinished goal question for resume.', purpose: 'direct', nodeId: 'goal', difficulty: 2, representation: 'symbolic' };
+  await stage(pending);
+  await emit('before_agent_start', { prompt: 'pause', systemPrompt: 'existing' });
+  assert.equal((await status()).phase, 'paused');
+  await checkpoint({ ...checkpointInput, evidence: [], lessonPlan: (await status()).plan, nextStep: 'Continue the unfinished goal question.' });
+  const savedPause = Object.values(JSON.parse(fs.readFileSync(path.join(vault, '.learning/progress.json'), 'utf8')))[0];
+  assert.ok(savedPause.nextStep.includes(pending.question));
+  assert.ok(!fs.readFileSync(path.join(vault, savedPause.note), 'utf8').includes('PRIVATE_UNANSWERED_FIXTURE_KEY'));
+  await runtime({ action: 'resume' });
+  assert.equal((await status()).pending.question, pending.question);
+  const finishedId = await submit(pending.question, { note: '' });
+  await assert.rejects(() => review(finishedId), /actual learner reasoning/);
+  const explanationEntry = entry({ role: 'user', content: 'I explain the actual fixture assumptions and justify the connected conclusion.' });
+  await runtime({ action: 'review', quizId: finishedId, reasoningSound: true, reasoningMessageId: explanationEntry, review: 'Actual subsequent fixture reasoning supplies the missing justification.', observed: 'Learner reasoning is in the subsequent submitted message.' });
+  assert.equal((await status()).nodeVerification[1].status, 'UNVERIFIED');
+
+  // A real final-test begin owns release quizzes; the runtime adds no fourth check.
+  const lockFolder = path.join(scratch, 'work/study-lock'); fs.mkdirSync(lockFolder, { recursive: true });
+  fs.writeFileSync(path.join(lockFolder, 'current.json'), JSON.stringify({ active: true, sessionId, testStarted: Date.now(), excluded: [] }));
+  const finalEvent = { toolName: 'quiz', toolCallId: 'final-fixture', input: { question: 'Fresh final-test fixture?' } };
+  assert.equal((await emit('tool_call', finalEvent)).block, true, 'A file assertion without actual study_test begin cannot bypass lesson gates');
+  call('final-begin', 'study_test', { action: 'begin' }); result('final-begin', 'study_test', { status: 'accepted' });
+  assert.ok(!(await emit('tool_call', finalEvent))?.block, 'Existing final test is authoritative');
+  fs.writeFileSync(path.join(lockFolder, 'current.json'), JSON.stringify({ active: true, sessionId: 'other-session', testStarted: Date.now() }));
+  assert.equal((await emit('tool_call', finalEvent)).block, true);
+
+  await commands.get('test-prep').handler('unrecorded-topic', ctx);
+  assert.ok(notices.at(-1).text.includes('No matching saved weakness'));
+  await commands.get('test-prep').handler('Fixture topic', ctx);
+  assert.ok(sent.at(-1).content.includes('Fixture graph interpretation needs a further check.'));
+  assert.ok(sent.at(-1).content.includes('"context","notation"'));
+  assert.ok(sent.at(-1).content.includes('Do not show checkpoint solutions'));
+
+  // New sessions preserve old confirmed maps without upgrading their evidence standard.
+  sessionId = 'legacy-resume-fixture'; entries = [];
+  call('legacy-cancel', 'quiz', { question: 'Fixture exact old cancelled question?' });
+  result('legacy-cancel', 'quiz', { status: 'cancelled', question: 'Fixture exact old cancelled question?' });
+  const legacy = { topic: 'Legacy fixture', goal: 'Legacy agreed goal', understood: ['Old demonstrated claim'], needsPractice: ['Old gap'], sources: ['Prior inspected source'], nextStep: 'Resume the old current node', lessonPlan: progressed };
+  fs.writeFileSync(path.join(vault, '.learning/progress.json'), JSON.stringify({ legacy }));
+  const old = await runtime({ action: 'begin', topic: legacy.topic, goal: legacy.goal });
+  assert.equal(old.phase, 'teach');
+  assert.equal(old.nodeVerification[0].status, 'LEGACY_CHECKED');
+  assert.equal(old.pending.question, 'Fixture exact old cancelled question?');
+  assert.ok(!JSON.stringify(old.pending).includes('correctAnswer'));
+  assert.equal(old.approvalId, 'saved-approved-checkpoint');
+
+  // Course classification cannot substitute supplemental inspection for an available original.
+  sessionId = 'armstrong-priority-fixture'; entries = [];
+  const catalogFolder = path.join(vault, 'Sources/Armstrong Online'); fs.mkdirSync(catalogFolder, { recursive: true });
+  const armstrongPath = path.join(scratch, 'armstrong-fixture.md'); fs.writeFileSync(armstrongPath, 'Original-source identity fixture only.');
+  const lesson = { key: 'u1-fixture', unit: 1, title: 'Fixture class title', ids: ['1.1.1'], variants: [], note: sourceFile, availability: 'Fixture cached original', assessments: [], schedule: [], assets: [{ ok: true, path: armstrongPath, label: 'Fixture original', url: 'https://example.invalid/fixture' }], references: [], teaching: { focus: 'Fixture scope', probe: 'Fixture probe', prerequisites: [], guardrails: 'Fixture guardrails' } };
+  fs.writeFileSync(path.join(catalogFolder, 'course-catalog.json'), JSON.stringify({ version: 1, builtAt: 'fixture', sourceHashes: {}, warnings: [], lessons: [lesson], assessments: [], events: [] }));
+  await runtime({ action: 'begin', topic: 'Fixture class title', goal: 'Fixture class scope', strands });
+  assert.equal((await status()).lessonKey, lesson.key, 'Exact known title automatically selects its class identity');
+  call('supplement-read', 'read', { path: sourceFile }); result('supplement-read', 'read', {}, 'Inspected supplement fixture.');
+  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'supplement-read', path: sourceFile, kind: 'supplement', supports: 'Supplemental scope information for fixture only.' }] });
+  await assert.rejects(() => stage(probe('algebra', 1, 'class-before-original')), /Cached Armstrong/);
+  call('original-read', 'read', { path: armstrongPath }); result('original-read', 'read', {}, 'Inspected original identity fixture.');
+  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'original-read', path: armstrongPath, kind: 'armstrong', supports: 'Relevant original class fixture inspected before supplements.' }] });
+  await stage(probe('algebra', 1, 'class-after-original'));
+  const interrupted = 'crash-interrupted-quiz';
+  call(interrupted, 'quiz', { question: (await status()).pending.question });
+  assert.ok(!(await emit('tool_call', { toolName: 'quiz', toolCallId: interrupted, input: { question: (await status()).pending.question } }))?.block);
+  await emit('session_start', {});
+  assert.equal((await status()).phase, 'paused', 'An interrupted tool call reopens the same prompt without fabricated evidence');
+  assert.equal((await status()).pending.quizId, undefined);
+  assert.equal((await status()).pending.question, probe('algebra', 1, 'class-after-original').question);
+
+  sessionId = 'contradicted-floor-fixture'; entries = [];
+  await runtime({ action: 'begin', topic: 'Outside catalog fixture', goal: 'Bracket a contradicted floor', strands: [strands[0]] });
+  call('floor-source', 'read', { path: sourceFile }); result('floor-source', 'read', {}, 'Inspected source fixture.');
+  await runtime({ action: 'sources', sourceReviews: [{ toolCallId: 'floor-source', path: sourceFile, kind: 'supplement', supports: 'Original fixture source definitions and assumptions.' }] });
+  await runtime({ action: 'research', research: { summary: 'Verified fixture definitions, hypotheses, framing and gotchas from the inspected original source.', sourceToolCallIds: ['floor-source'] } });
+  await attempt(probe('algebra', 1, 'initial-low-floor'));
+  await attempt(probe('algebra', 1, 'contradicted-floor'), { correct: false }, ['concept']);
+  await attempt(probe('algebra', 1, 'unresolved-neighbour', 'clarify'), { correct: false }, ['concept']);
+  const floorPlan = { ...planning, plan: { goalNode: 'root', nodes: [plan.nodes[0]] }, nodeStrands: [{ nodeId: 'root', strandIds: ['algebra'] }] };
+  await assert.rejects(() => runtime(floorPlan), /Every relevant prerequisite/);
+  await attempt(probe('algebra', 1, 'new-sound-floor', 'clarify'));
+  const floorProposed = await runtime(floorPlan);
+  const typed = entry({ role: 'user', content: 'yes' });
+  await runtime({ action: 'approve', approvalId: typed });
+  assert.equal((await status()).phase, 'teach');
+  assert.ok(floorProposed.approvalValue);
+  const runtimeTool = tools.get('learning_runtime').definition;
+  const displayState = await status();
+  const displayResult = { details: displayState, content: [{ type: 'text', text: JSON.stringify(displayState) }] };
+  const rendererContext = { args: { action: 'status' }, isError: false };
+  const theme = ctx.ui.theme;
+  const collapsed = runtimeTool.renderResult(displayResult, { expanded: false, isPartial: false }, theme, rendererContext).render(100).join('\n');
+  assert.ok(collapsed.length < 150 && !collapsed.includes('sourceToolCallIds') && !collapsed.includes('Fixture prerequisite'), 'Default terminal view excludes runtime bookkeeping and pending quiz text');
+  const expanded = runtimeTool.renderResult(displayResult, { expanded: true, isPartial: false }, theme, rendererContext).render(100).join('\n');
+  assert.ok(expanded.includes('sourceToolCallIds') && expanded.includes('reviews'), 'Full audited records remain available on expansion');
+  const renderedCall = runtimeTool.renderCall({ action: 'question', question: { question: 'PRIVATE_PENDING_PROMPT' } }, theme, {}).render(100).join('\n');
+  assert.ok(!renderedCall.includes('PRIVATE_PENDING_PROMPT') && !renderedCall.includes('questionId'), 'Only quiz controls display the staged learner question');
+  const renderedError = runtimeTool.renderResult({ content: [{ type: 'text', text: 'A real verification error must remain visible.' }] }, { expanded: false, isPartial: false }, theme, { ...rendererContext, isError: true }).render(100).join('\n');
+  assert.ok(renderedError.includes('verification error'), 'Compact rendering never hides real failures');
+  const agentContext = await emit('before_agent_start', { prompt: 'Continue this lesson', systemPrompt: 'existing' });
+  // Locate the runtime hook independently of the existing teaching-policy hook.
+  let runtimeContext;
+  for (const extension of extensions) for (const handler of extension.handlers.get('before_agent_start') ?? []) {
+    const value = await handler({ prompt: 'Continue this lesson', systemPrompt: 'existing' }, ctx);
+    if (value?.message?.customType === 'learning-runtime') runtimeContext = value.message.content;
+  }
+  assert.ok(agentContext && runtimeContext.includes('recentReviews') && !runtimeContext.includes('"reviews":'), 'Automatic context is compact; explicit status and persisted evidence retain full history');
+  assert.ok(agentContext.systemPrompt.includes('The two design principles') && agentContext.systemPrompt.includes("The learner's explicit additions"), 'Live guidance consumes the transcript-grounded principles while preserving explicitly requested additions');
+  console.log('Runtime guards passed: source/research provenance, all-strand bracketing, escalation, error repair, plan approval, per-node loop, direct+fresh transfer, checkpoints, exact resume, legacy progress, test-prep and unchanged final-test authority.');
+} finally {
+  fs.rmSync(scratch, { recursive: true, force: true });
+}
